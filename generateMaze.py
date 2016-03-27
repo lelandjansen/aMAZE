@@ -1,14 +1,15 @@
-# maze.py
+# generateMaze.py
+
+# Generate maze using recursive backtracking
+# Sources:
+#  http://www.jamisbuck.org/presentations/rubyconf2011/index.html
+#  http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
+
+
 
 import random
 
-# Maze grid size
-sizex = 5
-sizey = 5
-
-
-
-def generateMaze(sizex, sizey):
+def generateMaze(sizex, sizey, startx, starty):
 
     # Generate maze
     # Runtime: O(x*y)
@@ -36,21 +37,15 @@ def generateMaze(sizex, sizey):
                     maze[(dx,dy)].append((x,y)) # undirected graph
                     generatePath(dx,dy)
 
-
-    startx, starty = 0, 0
-    # Alternately:
-    # Choose random starting position
-    # startx, starty = random.randint(0, sizex-1), random.randint(0, sizey-1)
-
     generatePath(startx, starty)
 
     return maze
 
 
+def printMaze(maze):
+    for node in maze:
+        print(str(node) + ": " + str(maze[node]))
 
-myMaze = generateMaze(4,4)
-for node in myMaze:
-    print(str(node) + ": " + str(myMaze[node]))
 
 
 
