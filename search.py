@@ -7,6 +7,7 @@
 
 import sys
 import random
+random.seed(0) # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DELETE THIS
 
 from generateMaze import generateMaze
 from generateMaze import printMaze
@@ -20,19 +21,40 @@ def find_path(graph, start, end, path=[]):
     # Source:
     #  https://www.python.org/doc/essays/graphhs/
 
-    if start not in graph or end not in graph:
-        return None
+    if start not in graph:
+        KeyError("Start node " + str(start) + " not in maze.")
+    if end not in graph:
+        KeyError("End node " + str(end) + " not in maze.")
 
     path = path + [start]
     if start == end:
         return path
-    # if not start in graph:
-    #     return None
     for node in graph[start]:
         if node not in path:
             newpath = find_path(graph, node, end, path)
             if newpath: return newpath
     return None
+
+
+# "Kinda smart" AI
+def dfs_path(graph, start, end, path=[]):
+
+    if start not in graph:
+        KeyError("Start node " + str(start) + " not in maze.")
+    if end not in graph:
+        KeyError("End node " + str(end) + " not in maze.")
+
+
+    path = path + [start]
+    if start == end:
+        return path
+    for node in graph[start]:
+        if node not in path:
+            path = path + find_path(graph, node, end, path)
+
+    return path
+
+
 
 
 # "Silly" AI
@@ -41,8 +63,10 @@ def find_path(graph, start, end, path=[]):
 # then uses find_path to find a way out
 def randomSearch(graph, start, end, path=[]):
 
-    if start not in graph or end not in graph:
-        return None
+    if start not in graph:
+        KeyError("Start node " + str(start) + " not in maze.")
+    if end not in graph:
+        KeyError("End node " + str(end) + " not in maze.")
 
     path = [start]
     for i in range(5000):
@@ -58,12 +82,16 @@ def randomSearch(graph, start, end, path=[]):
 
 
 
-# myMaze = generateMaze(20, 20, 0, 0)
-# print("Shortest path:")
-# print(find_path(myMaze, (0,0), (4,4)))
+myMaze = generateMaze(9000, 9000, 0, 0)
+print("Smart AI:")
+print(len(find_path(myMaze, (0,0), (700,700))))
+print()
+print()
+print("Kinda Smart AI:")
+print(len(dfs_path(myMaze, (0,0), (700,700))))
 # print()
 # print()
-# print("Random path:")
-# print(randomSearch(myMaze, (0,0), (4,4)))
+# print("Silly AI:")
+# print(randomSearch(myMaze, (0,0), (80,90)))
 
 # That's all folks!
