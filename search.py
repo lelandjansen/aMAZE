@@ -45,12 +45,24 @@ def dfs_path(graph, start, end, path=[]):
         KeyError("End node " + str(end) + " not in maze.")
 
 
-    path = path + [start]
-    if start == end:
-        return path
-    for node in graph[start]:
-        if node not in path:
-            path = path + find_path(graph, node, end, path)
+    path = [start]
+    visited = {start}
+
+    def dfs(node, end):
+
+        nextNode = random.shuffle(graph[node])
+        print(nextNode)
+        for succ in nextNode:
+            if succ == end:
+                path += [end]
+                return
+            if succ not in visited:
+                path = path + [succ]
+                dfs(succ, end)
+                path = path + [succ]
+
+
+    dfs(start, end)
 
     return path
 
@@ -82,13 +94,12 @@ def randomSearch(graph, start, end, path=[]):
 
 
 
-myMaze = generateMaze(9000, 9000, 0, 0)
+myMaze = generateMaze(100, 100, 0, 0)
 print("Smart AI:")
-print(len(find_path(myMaze, (0,0), (700,700))))
-print()
+print(len(find_path(myMaze, (0,0), (80,90))))
 print()
 print("Kinda Smart AI:")
-print(len(dfs_path(myMaze, (0,0), (700,700))))
+print(len(dfs_path(myMaze, (0,0), (80,90))))
 # print()
 # print()
 # print("Silly AI:")
