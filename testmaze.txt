@@ -1,0 +1,4 @@
+import generateMaze
+maze =Maze(8,8)
+maze.generateMaze()
+maze.ExportMaze()

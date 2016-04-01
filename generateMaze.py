@@ -8,45 +8,121 @@
 
 
 import random
+import cairo
 
-def generateMaze(sizex, sizey, startx, starty):
+nodeSize = 32   # Size of a node in pixels
+wallSize = 2    # Thickness of walls in pixels, must be even
 
-    # Generate maze
-    # Runtime: O(x*y)
-    maze = {}
-    for i in range(sizex):
-        for j in range(sizey):
-            maze[(i,j)] = []
+class Maze:
+    '''Maze class. Contains an undirected graph that contains the maze.
+       The maze is stored in the form of a dictionary of tuples that specify
+       each nodes location in space, along with what each nodes neighbors are.
+       The class also contains functions for generating the maze, printing
+       out a list of each node and its neighbors, and a function for rasterizing
+       the maze into an image for use with the game
+    '''
+    def __init__(self, sizex, sizey):
+        self.sizex = sizex
+        self.sizey = sizey
+        self.maze = None
 
+    def generateMaze(self, startx=0, starty=0):
 
-    # Type a clever description
-    # Runtime: O(?????????????????)
-    def generatePath(x, y):
-
-        #              left    right    down     up
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        random.shuffle(directions)
-
-        for d in directions:
-            dx, dy = x + d[0], y + d[1]
-
-            # Check that the node is in the bounds of the graph
-            if -1 < dx and dx < sizex and -1 < dy and dy < sizey:
-                if maze[(dx,dy)] == []:
-                    maze[(x,y)].append((dx,dy))
-                    maze[(dx,dy)].append((x,y)) # undirected graph
-                    generatePath(dx,dy)
-
-    generatePath(startx, starty)
-
-    return maze
+        # Generate maze
+        # Runtime: O(x*y)
+        maze = {}
+        for i in range(self.sizex):
+            for j in range(self.sizey):
+                maze[(i,j)] = []
 
 
-def printMaze(maze):
-    for node in maze:
-        print(str(node) + ": " + str(maze[node]))
+        # Type a clever description
+        # Runtime: O(?????????????????)
+        def generatePath(x, y):
+
+            #              left    right    down     up
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            random.shuffle(directions)
+
+            for d in directions:
+                dx, dy = x + d[0], y + d[1]
+
+                # Check that the node is in the bounds of the graph
+                if -1 < dx and dx < self.sizex and -1 < dy and dy < self.sizey:
+                    if maze[(dx,dy)] == []:
+                        maze[(x,y)].append((dx,dy))
+                        maze[(dx,dy)].append((x,y)) # undirected graph
+                        generatePath(dx,dy)
+
+        generatePath(startx, starty)
+
+        self.maze = maze
 
 
+    def printMaze(self):
+        for node in self.maze:
+            print(str(node) + ": " + str(self.maze[node]))
 
+
+    def ExportMaze(self):
+        MazeSurface = cairo.ImageSurface(cairo.FORMAT_RGB24, nodeSize*self.sizex, nodeSize*self.sizey)
+        surfaceHandle = cairo.Context(MazeSurface)
+
+        # Set whole surface black
+        surfaceHandle.set_source_rgb(0,0,0)
+
+        # Set the surface up for paining white walls
+        surfaceHandle.paint()
+        surfaceHandle.set_source_rgb(1,1,1)
+        surfaceHandle.set_line_width(wallSize)
+
+        for node in self.maze:
+            # Wall flags for this node
+            top = False
+            bottom = False
+            left = False
+            right = False
+
+            x = node[0]
+            y = node[1]
+
+            neighbors = self.maze[node]
+            for neighbor in neighbors:
+
+                dx = neighbor[0]-x
+                dy = neighbor[1]-y
+
+                # Node is above
+                if dx == 0 and dy == 1:
+                    top = True
+                if dx == 0 and dy == -1:
+                    bottom = True
+                if dx == 1 and dy == 0:
+                    right = True
+                if dx == -1 and dy == 0:
+                    left = True
+
+            if not top:
+
+                surfaceHandle.move_to(x*nodeSize,y*nodeSize+nodeSize)
+                surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
+
+            if not bottom:
+
+                surfaceHandle.move_to(x*nodeSize,y*nodeSize)
+                surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize)
+
+
+            if not left:
+
+                surfaceHandle.move_to(x*nodeSize,y*nodeSize)
+                surfaceHandle.line_to(x*nodeSize,y*nodeSize+nodeSize)
+
+            if not right:
+
+                surfaceHandle.move_to(x*nodeSize+nodeSize,y*nodeSize)
+                surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
+        surfaceHandle.stroke()
+        MazeSurface.write_to_png("maze.png")
 
 # That's all folks!
