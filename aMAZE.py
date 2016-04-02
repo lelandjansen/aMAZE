@@ -6,7 +6,7 @@
 import os
 import time
 import getch
-from generateMaze import maze
+from generateMaze import Maze
 import gamestate
 # Enumeration for menu states
 MENU_MAIN = '0'
@@ -53,8 +53,8 @@ def start_game():
     mazeGraph = Maze(mapSize, mapSize)
     mazeGraph.generateMaze()
     mazeGraph.exportMaze()
-    #os.system("clear")
-    os.system("xdg-open maze.png")
+    os.system("clear")
+    #os.system("xdg-open maze.png")
     return MENU_EXECUTE_GAME
 
 # Menu for selecting the ai Speed
@@ -282,7 +282,7 @@ if __name__ == "__main__":
         elif next_Menu == MENU_START_GAME:
             next_Menu = start_game()
         elif next_Menu == MENU_EXECUTE_GAME:
-            next_Menu = gamestate.game_state(mazeGraph)
+            next_Menu = gamestate.game_state(mazeGraph, mapSize)
         elif next_Menu == MENU_QUIT:
             break
     #os.system("clear")
