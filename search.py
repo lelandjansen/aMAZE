@@ -130,9 +130,9 @@ def ai(intelligence, maze, start, end):
 
 
 
-mazeSize   = (5, 10)
+mazeSize   = (7, 10)
 startCoord = (2,3)
-endCoord   = (7,8)
+endCoord   = (5,8)
 
 
 myMaze = Maze(mazeSize[0],mazeSize[1])
@@ -147,6 +147,8 @@ for x in range(mazeSize[0]):
     for y in range(mazeSize[1]):
         scoreList[x].append(abs((abs(x-endCoord[0]) + abs(y-endCoord[1]))))
 
+scoreList = list(zip(*scoreList))
+
 for i in range(len(scoreList)):
     for j in range(len(scoreList[i])):
         number = scoreList[i][j]
@@ -156,10 +158,6 @@ for i in range(len(scoreList)):
     print()
     print()
 
-
-
-# To compute farthest point (manhattan)
-# (sizeX-2(sizeX//2 - endX//2)) + (sizeY-2(sizeY//2 - endY//2))
 
 
 def biasPoint(maze, end, difficulty):
@@ -179,13 +177,18 @@ def biasPoint(maze, end, difficulty):
 
     # Compute AI bias score based on difficulty
     biasScore = farthestPointScore - (difficulty * farthestPointScore) // 100
+    print(biasScore)
 
     biasPoint = list(end)
 
     direction = (random.choice([-1, 1]), random.choice([-1, 1]))
 
-    for d in range(biasScore):
+    for d in range(biasScore-1):
         i = random.choice([0, 1])
+        if biasPoint[i] == end[i]:
+            print("your mother")
+        if biasPoint[i] == end[i]:
+            biasPoint[(i+1)%2] += direction[(i+1)%2]
         biasPoint[i] += direction[i]
     biasPoint = tuple(biasPoint)
     print(biasPoint)
