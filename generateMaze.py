@@ -5,6 +5,10 @@
 #  http://www.jamisbuck.org/presentations/rubyconf2011/index.html
 #  http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
 
+# Please note that cairo is required for this python script to run
+# For Unix systems: This should be already installed if python 3.xx is installed
+# For Windows systems: Please follow the instructions on how to install CairoCFFI
+# Detailed in the readme
 
 
 import random
@@ -13,7 +17,7 @@ import cairo
 nodeSize = 32   # Size of a node in pixels
 wallSize = 2    # Thickness of walls in pixels, must be even
 
-class Maze:
+class maze:
     '''Maze class. Contains an undirected graph that contains the maze.
        The maze is stored in the form of a dictionary of tuples that specify
        each nodes location in space, along with what each nodes neighbors are.
@@ -63,8 +67,10 @@ class Maze:
         for node in self.maze:
             print(str(node) + ": " + str(self.maze[node]))
 
+    def graph(self):
+        return self.maze
 
-    def ExportMaze(self):
+    def exportMaze(self):
         MazeSurface = cairo.ImageSurface(cairo.FORMAT_RGB24, nodeSize*self.sizex, nodeSize*self.sizey)
         surfaceHandle = cairo.Context(MazeSurface)
 
@@ -125,4 +131,8 @@ class Maze:
         surfaceHandle.stroke()
         MazeSurface.write_to_png("maze.png")
 
+    def get_sizex(self):
+        return self.sizex
+    def get_sizey(self):
+        return self.sizey
 # That's all folks!

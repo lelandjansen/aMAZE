@@ -6,8 +6,8 @@
 import os
 import time
 import getch
-from generateMaze import Maze
-
+from generateMaze import maze
+import gamestate
 # Enumeration for menu states
 MENU_MAIN = '0'
 MENU_NEW_GAME_MAPSIZE = '1'
@@ -17,7 +17,7 @@ MENU_LEADERBOARDS = '2'
 MENU_ABOUT = '3'
 MENU_QUIT = 'q'
 MENU_START_GAME = '6'
-
+MENU_EXECUTE_GAME = '7'
 MAP_SMALL = 8               # Small map. 8x8 tiles (64 total)
 MAP_MEDIUM = 16             # Medium map. 16x16 tiles (256 total)
 MAP_LARGE = 32              # Large map. 32 x 32 tiles ()
@@ -34,7 +34,7 @@ AI_FAST = 4
 mapSize = None              # The size of the map to be generated
 aiDifficulty = None         # The Intellegence flag of the AI
 aiSpeed = None              # The speed of the ai
-
+mazeGraph = None
 
 # Pointer to function that pulls a single character from
 # the console (see getch.py)
@@ -42,16 +42,20 @@ get_ch = getch._Getch()
 
 # Starts Pygame and all that fun stuff
 def start_game():
+
     print("Map Size:      " + str(mapSize))
     print("AI Difficulty: " + str(aiDifficulty))
     print("AI Speed:      " + str(aiSpeed))
     print()
     print("Generating Maze.")
     time.sleep(1)
-    maze = Maze(mapSize, mapSize)
-    maze.generateMaze()
-    maze.ExportMaze()
-    return MENU_QUIT
+    global mazeGraph
+    mazeGraph = maze(mapSize, mapSize)
+    mazeGraph.generateMaze()
+    mazeGraph.exportMaze()
+    #os.system("clear")
+    os.system("xdg-open maze.png")
+    return MENU_EXECUTE_GAME
 
 # Menu for selecting the ai Speed
 def newGame_aiSpeed():
@@ -277,6 +281,8 @@ if __name__ == "__main__":
             next_Menu = about()
         elif next_Menu == MENU_START_GAME:
             next_Menu = start_game()
+        elif next_Menu == MENU_EXECUTE_GAME:
+            next_Menu = gamestate.game_state(mazeGraph)
         elif next_Menu == MENU_QUIT:
             break
     #os.system("clear")

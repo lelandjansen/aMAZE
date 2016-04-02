@@ -1,4 +1,3 @@
-# aMAZE
 Overview:
   aMAZE is a game designed by Leland Jansen and Michael Steer. The
   objective of the game is to navigate your way out of a maze before
