@@ -17,7 +17,7 @@ import cairo
 nodeSize = 32   # Size of a node in pixels
 wallSize = 2    # Thickness of walls in pixels, must be even
 
-class maze:
+class Maze:
     '''Maze class. Contains an undirected graph that contains the maze.
        The maze is stored in the form of a dictionary of tuples that specify
        each nodes location in space, along with what each nodes neighbors are.

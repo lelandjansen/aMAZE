@@ -50,7 +50,7 @@ def start_game():
     print("Generating Maze.")
     time.sleep(1)
     global mazeGraph
-    mazeGraph = maze(mapSize, mapSize)
+    mazeGraph = Maze(mapSize, mapSize)
     mazeGraph.generateMaze()
     mazeGraph.exportMaze()
     #os.system("clear")
