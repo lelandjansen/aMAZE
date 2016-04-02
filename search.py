@@ -7,7 +7,7 @@
 
 import sys
 import random
-random.seed(0) # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DELETE THIS
+# random.seed(0) # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DELETE THIS
 
 # from generateMaze import Maze
 from generateMaze import Maze
@@ -46,9 +46,9 @@ def dfs_path(graph, start, end):
         KeyError("End node "   + str(end)   + " not in maze.")
 
 
-    path = [start]
+    path    = [start]
     visited = set(start)
-    found = False
+    found   = False
 
     def dfs(node, end):
         visited.add(node)
@@ -66,12 +66,107 @@ def dfs_path(graph, start, end):
                 if not dfs.found:
                     dfs.path += [succ]
 
-    dfs.path = path
+    dfs.path    = path
     dfs.visited = visited
-    dfs.found = found
+    dfs.found   = found
+
     dfs(start, end)
 
     return path
+
+
+# "A bit sillier smart" AI
+# Objective: Choose the path that will take the AI furthest from the goal
+def dfs_path_silly(graph, start, end):
+    if start not in graph:
+        KeyError("Start node " + str(start) + " not in maze.")
+    if end not in graph:
+        KeyError("End node "   + str(end)   + " not in maze.")
+
+
+    path    = [start]
+    visited = set(start)
+    found   = False
+
+    def dfs(node, end):
+        visited.add(node)
+        nextNode = graph[node]
+
+        nextNode.sort(key=lambda x: abs(x[0]-start[0]) + abs(x[1]-start[1]) )
+        # print(nextNode)
+
+        for succ in nextNode:
+            if succ == end:
+                dfs.found = True
+                dfs.path += [end]
+                return
+            if succ not in visited:
+                if not dfs.found:
+                    dfs.path += [succ]
+                dfs(succ, end)
+                if not dfs.found:
+                    dfs.path += [succ]
+
+    dfs.path    = path
+    dfs.visited = visited
+    dfs.found   = found
+
+    dfs(start, end)
+
+    return path
+
+
+
+
+
+
+
+
+# "A bit sillier smart" AI
+# Objective: Choose the path that will take the AI furthest from the goal
+def dfs_path_smart(graph, start, end):
+    if start not in graph:
+        KeyError("Start node " + str(start) + " not in maze.")
+    if end not in graph:
+        KeyError("End node "   + str(end)   + " not in maze.")
+
+
+    path    = [start]
+    visited = set(start)
+    found   = False
+
+    def dfs(node, end):
+        visited.add(node)
+        nextNode = graph[node]
+
+        nextNode.sort(key=lambda x: abs(x[0]-end[0]) + abs(x[1]-end[1]) )
+        # print(nextNode)
+
+        for succ in nextNode:
+            if succ == end:
+                dfs.found = True
+                dfs.path += [end]
+                return
+            if succ not in visited:
+                if not dfs.found:
+                    dfs.path += [succ]
+                dfs(succ, end)
+                if not dfs.found:
+                    dfs.path += [succ]
+
+    dfs.path    = path
+    dfs.visited = visited
+    dfs.found   = found
+
+    dfs(start, end)
+
+    return path
+
+
+
+
+
+
 
 
 
@@ -115,17 +210,36 @@ def ai(intelligence, graph, start, end):
         raise ValueError("Intelligence level " + str(intelligence)
                             + " does not exist")
 
-myMaze = Maze(16,16)
+
+
+
+mazeSize = 16
+startCoord = (0,0)
+endCoord = (mazeSize-1,mazeSize-1)
+
+
+myMaze = Maze(mazeSize,mazeSize)
 myMaze.generateMaze()
 myGraph = myMaze.graph()
 
 
+
 print("Smart AI:")
-print(find_path(myGraph, (0,0), (15,15)))
+print(len(find_path(myGraph, startCoord, endCoord)))
+
+print()
+print("Kinda Smart Smarter AI:")
+print(len(dfs_path_smart(myGraph, startCoord, endCoord)))
+
 print()
 print("Kinda Smart AI:")
-print(dfs_path(myGraph, (0,0), (15,15)))
-# dfs_path(myGraph, (12,12), (31,31))
+print(len(dfs_path(myGraph, startCoord, endCoord)))
+
+print()
+print("Kinda Smart Sillier AI:")
+print(len(dfs_path_silly(myGraph, startCoord, endCoord)))
+
+
 
 # print()
 # print()
