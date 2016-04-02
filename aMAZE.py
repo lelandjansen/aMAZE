@@ -125,6 +125,7 @@ def newGame_aiDifficulty():
             return MENU_NEW_GAME_MAPSIZE
         else:
             next_Menu = None
+
 # Menu for selecting the map size
 def newGame_MapSize():
     global mapSize
@@ -266,6 +267,7 @@ if __name__ == "__main__":
     os.system("clear")
 
     next_Menu = main_Menu()
+    
     while True:
         if next_Menu == MENU_MAIN:
             next_Menu = main_Menu()
