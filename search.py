@@ -199,9 +199,9 @@ def randomSearch(maze, start, end, path=[]):
 
 
 
-mazeSize   = (16, 16)
-startCoord = (3,3)
-endCoord   = (12,12)
+mazeSize   = (32, 32)
+startCoord = (0,0)
+endCoord   = (31,31)
 
 
 myMaze = Maze(mazeSize[0],mazeSize[1])
@@ -209,23 +209,23 @@ myMaze.generateMaze()
 myGraph = myMaze.graph()
 
 
-scoreList = []
-
-for x in range(mazeSize[0]):
-    scoreList.append([])
-    for y in range(mazeSize[1]):
-        scoreList[x].append(abs((abs(x-endCoord[0]) + abs(y-endCoord[1]))))
-
-scoreList = list(zip(*scoreList))
-
-for i in range(len(scoreList)):
-    for j in range(len(scoreList[i])):
-        number = scoreList[i][j]
-        if number < 10:
-            print(" ", end="")
-        print("   " + str(number), end="")
-    print()
-    print()
+# scoreList = []
+#
+# for x in range(mazeSize[0]):
+#     scoreList.append([])
+#     for y in range(mazeSize[1]):
+#         scoreList[x].append(abs((abs(x-endCoord[0]) + abs(y-endCoord[1]))))
+#
+# scoreList = list(zip(*scoreList))
+#
+# for i in range(len(scoreList)):
+#     for j in range(len(scoreList[i])):
+#         number = scoreList[i][j]
+#         if number < 10:
+#             print(" ", end="")
+#         print("   " + str(number), end="")
+#     print()
+#     print()
 
 
 
@@ -251,7 +251,7 @@ for i in range(len(scoreList)):
 
 for difficulty in range(0,101):
     l = []
-    for t in range(1000):
+    for t in range(10000):
         l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
     # print("Difficulty " + str(difficulty) + ": " + str(sum(l) / len(l)))
     print(sum(l)/len(l))
