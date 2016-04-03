@@ -2,8 +2,8 @@
 
 # Search maze graph for path
 # Sources:
-#  Referenced search algorithms written in class
-#  https://www.python.org/doc/essays/graphhs/
+#  Referenced dfs search algorithms written in class
+#  and https://www.python.org/doc/essays/graphs/
 
 import sys
 import random
@@ -15,21 +15,37 @@ recursionLimit = 1000000
 sys.setrecursionlimit(recursionLimit)
 
 
-
+# Computes variable-difficulty AI bias point based on difficulty
 def getBiasPoint(maze, end, difficulty):
-    # maze: Maze class
-    # end: Tuple containing end point
-    # difficulty: Integer between 0 and 100
+    #
+    # Input
+    #   maze        Maze class
+    #   end         End node (tuple)
+    #   difficulty  Integer between 0 and 100 (inclusive)
+    # Output
+    #   A random point on the maze with score biasScore
+    #
+    # Runtime
+    #   O(n) (linear with respect to maze size)
+    #   Worst case  O( 4*(mazeSizeX + mazeSizeY) )
+    #
+    # Note
+    #   Score is the manhattan distance away from the end point
+    #
 
+
+    # Validate input
     if end not in maze.graph():
         KeyError("End point " + str(end) + " not in maze.")
     if difficulty < 0 or 100 < difficulty:
         ValueError("Difficulty must be between 0 and 100 (inclusive).")
 
+    # Maze size
     size = (maze.get_sizex(), maze.get_sizey())
 
-    farthestPointScore = size[0] - 2*(size[0]//2 - end[0]//2) + \
-                         size[1] - 2*(size[1]//2 - end[1]//2)
+    # Compute max score
+    maxScore = size[0] - 2*(size[0]//2 - end[0]//2) + \
+               size[1] - 2*(size[1]//2 - end[1]//2)
 
     # Compute AI bias score based on difficulty
     biasScore = farthestPointScore - (difficulty * farthestPointScore) // 100
@@ -37,8 +53,12 @@ def getBiasPoint(maze, end, difficulty):
     if biasScore is 0:
         return end
 
+    # List of all nodes on the maze with score biasScore
     points = []
 
+    # Find all points on maze with score biasScore and add to points list
+    # Traverse in diamond pattern
+    # Only add point if it is in the maze
     p = [-biasScore, 0]
     for i in range(4*biasScore):
         x, y = p[0] + end[0], p[1] + end[1]
@@ -58,44 +78,84 @@ def getBiasPoint(maze, end, difficulty):
             p[0] -= 1
             p[1] += 1
 
-    if not points:
-        print("EMPTY")
-
+    # Return random point in points
     return random.choice(points)
 
 
 
 
 
-# "Smart" AI
-def find_path(maze, start, end, path=[]):
-    # Source:
-    #  https://www.python.org/doc/essays/graphhs/
+# An alternate algorithm for getBiasPoint that is more time and space efficient,
+#  however, the bias points are not computed with equal probability
+# def getBiasPoint(maze, end, difficulty):
+#     # maze: Maze class
+#     # end: Tuple containing end point
+#     # difficulty: Integer between 0 and 100
+#
+#     if end not in maze.graph():
+#         KeyError("End point " + str(end) + " not in maze.")
+#     if difficulty < 0 or 100 < difficulty:
+#         ValueError("Difficulty must be between 0 and 100 (inclusive).")
+#
+#     size = (maze.get_sizex(), maze.get_sizey())
+#
+#     farthestPointScore = size[0] - 2*(size[0]//2 - end[0]//2) + \
+#                          size[1] - 2*(size[1]//2 - end[1]//2)
+#
+#     # Compute AI bias score based on difficulty
+#     biasScore = farthestPointScore - (difficulty * farthestPointScore) // 100
+#
+#     if biasScore is 0:
+#         return end
+#
+#     biasPoint = [0, 0]
+#
+#     # Runtime: O(farthestPointScore) worst case
+#     stepsRemaining = biasScore
+#     while stepsRemaining:
+#         i = random.choice([0, 1])
+#         bound = end[i] if stepsRemaining > end[i] else stepsRemaining
+#         steps = random.randint(1, bound)
+#         biasPoint[i] += steps
+#         stepsRemaining -= steps
+#
+#     reflections = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+#     random.shuffle(reflections)
+#     for r in reflections:
+#         x, y = end[0] + r[0]*biasPoint[0], end[1] + r[1]*biasPoint[1]
+#         if 0 <= x and x < maze.get_sizex() and 0 <= y and y < maze.get_sizey():
+#            return (x, y)
 
-    graph = maze.graph()
 
-    if start not in graph:
-        KeyError("Start node " + str(start) + " not in maze.")
-    if end not in graph:
-        KeyError("End node "   + str(end)   + " not in maze.")
 
-    path = path + [start]
-    if start == end:
-        return path
 
-    for node in graph[start]:
-        if node not in path:
-            newpath = find_path(maze, node, end, path)
-            if newpath: return newpath
-    return None
+
+
 
 
 
 
 # Variable intelligence AI
-def dfsPath(maze, start, end, difficulty):
+def mazeAI(maze, start, end, difficulty):
+    #
+    # Input
+    #   maze        Maze class
+    #   start       Start node (tuple)
+    #   end         End node (tuple)
+    #   difficulty  Integer between -1 and 101 (inclusive)
+    # Output
+    #   path        List containing AI path nodes
+    #
+    # Runtime
+    #   O(nodes + edges)
+    #   Variable-difficulty runtime: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #
+    # Note
+    #   See test results for detailed analysis of path length vs difficulty
+    #
 
     graph = maze.graph()
+
 
     if start not in graph:
         KeyError("Start node " + str(start) + " not in maze.")
@@ -103,196 +163,61 @@ def dfsPath(maze, start, end, difficulty):
         KeyError("End node "   + str(end)   + " not in maze.")
 
 
-    if difficulty is not -1:
-        biasPoint = getBiasPoint(maze, end, difficulty)
 
+    def dfsPath(node, end):
 
-    def dfs(node, end):
-
-        if not dfs.found:
-            dfs.path += [node]
         visited.add(node)
+        if not dfsPath.found:
+            dfsPath.path += [node]
+
         nextNode = graph[node]
 
-        random.shuffle(nextNode) if difficulty is -1 else \
+        if difficulty is -1:
+            random.shuffle(nextNode)
+        else:
             nextNode.sort(key=lambda n: \
-                          abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]))
+                          abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]) )
 
         for succ in nextNode:
             if succ == end:
-                dfs.found = True
-                dfs.path += [end]
+                dfsPath.found = True
+                dfsPath.path += [end]
             elif succ not in visited:
-                dfs(succ, end)
+                dfsPath(succ, end)
                 if not dfs.found:
-                    dfs.path += [node]
+                    dfsPath.path += [node]
 
 
+    def shortestPath(node, end, path=[]):
+        visited.add(node)
+        path += [node]
 
-    found   = dfs.found = False
-    path    = dfs.path  = []
+        if node == end: return path
+
+        nextNode.sort(key=lambda n: \
+                      abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]) )
+
+        shortest = None
+        for succ in nextNode:
+            if succ not in visited:
+                newPath = shortestPath(succ, end, path)
+            if newPath and (not shortest or len(newPath) < len(shortest)):
+                shortest = newPath
+        return shortest
+
+
     visited = set()
+    if difficulty < 101:
+        found   = dfsPath.found = False
+        path    = dfsPath.path  = []
+        if difficulty is not -1:
+            biasPoint = getBiasPoint(maze, end, difficulty)
+        dfsPath(start, end) # modifies path
+    else:
+        path = shortestPath(start, end)
 
+    # Return path if maze is solvable, None otherwise
+    return path if path else None
 
-    dfs(start, end)
-
-    return path
-
-
-
-
-
-# "Silly" AI
-# AI has 5000 tries to reach end
-# If it is not successful, it retraces its steps to the start,
-# then uses find_path to find a way out
-def randomSearch(maze, start, end, path=[]):
-
-    graph = maze.graph()
-
-    if start not in graph:
-        KeyError("Start node " + str(start) + " not in maze.")
-    if end not in graph:
-        KeyError("End node "   + str(end)   + " not in maze.")
-
-    path = [start]
-    for i in range(5000):
-        path.append(random.choice(graph[path[-1]]))
-        if path[-1] == end:
-            break
-
-    if path[-1] is not end:
-        path += path[::-1]
-        path += find_path(maze, start, end)
-
-    return path
-
-
-
-
-# mazeSize   = (32, 32)
-# startCoord = (0, 0)
-# endCoord   = (31, 31)
-#
-#
-# myMaze = Maze(mazeSize[0], mazeSize[1])
-# myMaze.generateMaze()
-#
-#
-# p = dfsPath(myMaze, startCoord, endCoord, 0)
-
-
-# for i in range(0, len(p)-1):
-#     if abs(p[i][0]-p[i+1][0]) and abs(p[i][1]-p[i+1][1]):
-#         print("SKIP: " + str(p[i]))
-#     if p[i][0] == p[i+1][0] and p[i][1] == p[i+1][1]:
-#         print("Adjacent duplicate: " + str(p[i]))
-#     if abs(p[i][0]-p[i+1][0]) > 1 or abs(p[i][1]-p[i+1][1]) > 1:
-#         print("Jump: " + str(p[i]))
-
-
-#
-# scoreList = []
-#
-# for x in range(mazeSize[0]):
-#     scoreList.append([])
-#     for y in range(mazeSize[1]):
-#         scoreList[x].append(abs((abs(x-endCoord[0]) + abs(y-endCoord[1]))))
-#
-# scoreList = list(zip(*scoreList))
-#
-# for i in range(len(scoreList)):
-#     for j in range(len(scoreList[i])):
-#         number = scoreList[i][j]
-#         if number < 10:
-#             print(" ", end="")
-#         print("   " + str(number), end="")
-#     print()
-#     print()
-
-
-
-
-
-
-
-# n = 10000
-# result = {}
-# for i in range(n):
-#     answer = getBiasPoint(myMaze, endCoord, 50)
-#     if answer in result:
-#         result[answer] += 1
-#     else:
-#         result[answer] = 1
-#
-# print("Expected: " + str(1/len(result)))
-#
-# for r in result:
-#     print(str(r) + ": " + str(result[r]/n))
-
-
-
-
-# # Average path length to end vs difficulty
-# for difficulty in range(0,101):
-#     l = []
-#     for t in range(1000):
-#         l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
-#     # print("Difficulty " + str(difficulty) + ": " + str(sum(l) / len(l)))
-#     print(sum(l)/len(l))
-
-
-
-
-
-# for r in result:
-#     print(str(r) + ": " + str(result[r]/n))
-
-
-# for difficulty in range(0,101):
-#     l = []
-#     for t in range(3333):
-#         l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
-#     # print("Difficulty " + str(difficulty) + ": " + str(sum(l) / len(l)))
-#     print(sum(l)/len(l))
-
-
-
-
-
-# print()
-# myPath = dfsPath(myGraph, startCoord, endCoord, 1)
-# print("Worst path DFS:" + str(len(myPath)))
-# print(myPath)
-#
-# print()
-# myPath = dfsPath(myGraph, startCoord, endCoord, 2)
-# print("Random path DFS: " + str(len(myPath)))
-# print(myPath)
-#
-# print()
-# myPath = dfsPath(myGraph, startCoord, endCoord, 3)
-# print("Best path DFS: " + str(len(myPath)))
-# print(myPath)
-#
-# print()
-# myPath = find_path(myGraph, startCoord, endCoord)
-# print("Shortest path: " + str(len(myPath)))
-# print(myPath)
-#
-#
-#
-# print()
-# print()
-# print()
-# print()
-# print()
-# print()
-# print()
-# print()
-
-
-# print("Silly AI:")
-# print(randomSearch(myMaze, (0,0), (80,90)))
 
 # That's all folks!
