@@ -42,10 +42,6 @@ def new_round(mapSize):
     aiPath = search.dfsPath(maze, endpoint, startpoint, 100)
     generateMaze.display_ai(maze, aiPath)
 
-    for i in range(len(aiPath)-2):
-        if abs(aiPath[i][0] - aiPath[i+1][0]) and abs(aiPath[i][1] - aiPath[i+1][1]):
-            print("wtf is happening")
-
 # The actual game state where all the magic happens
 def game_state(mapSize, aiSpeed, aiDifficulty):
 
