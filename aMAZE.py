@@ -19,15 +19,11 @@ MENU_ABOUT = '3'
 MENU_QUIT = 'q'
 MENU_START_GAME = '6'
 MENU_EXECUTE_GAME = '7'
+MENU_GAME_OVER = '8'
 MAP_SMALL = 8               # Small map. 8x8 tiles (64 total)
 MAP_MEDIUM = 16             # Medium map. 16x16 tiles (256 total)
 MAP_LARGE = 32              # Large map. 32 x 32 tiles ()
 
-AI_EASY = False             # Easy mode for the ai. It randomly navigates
-                            # Around the maze
-
-AI_HARD = True              # Hard mode for the ai. It knows the shortest
-                            # Path out of the maze
 AI_SLOW = 2
 AI_FAST = 4
 
@@ -40,6 +36,23 @@ mazeGraph = None
 # Pointer to function that pulls a single character from
 # the console (see getch.py)
 get_ch = getch._Getch()
+
+def game_over(score):
+    os.system("clear")
+    print("===========================")
+    print("=          aMAZE          =")
+    print("===========================")
+    print("=       GAME OVER :(      =")
+    print("===========================")
+    print("= Enter your Name         =")
+    print("=       10 Characters max =")
+    print("===========================")
+    name = input()
+
+    leaderboard = Leaderboard()
+    leaderboard.readLeaderboard()
+    leaderboard.addUser(name, score)
+    leaderboard.writeLeaderboard()
 
 # Starts Pygame and all that fun stuff
 def start_game():
@@ -58,8 +71,8 @@ def newGame_aiSpeed():
     print("===========================")
     print()
     print()
-    print("1) Slow. 2 Nodes / Second")
-    print("2) Hard. 5 Nodes / Second")
+    print("1) Slow. 2 Nodes / Second ( slower then you)")
+    print("2) Fast. 4 Nodes / Second (   same as you  )")
     print("3) Back")
 
     next_Menu = None
@@ -93,9 +106,14 @@ def newGame_aiDifficulty():
     print("===========================")
     print()
     print()
-    print("1) Easy. Not smart. Sucks at mazes")
-    print("2) Hard. Magically knows the direct route out")
-    print("3) Back")
+    print("1) 0/100.   Very Easy ")
+    print("2) 20/100.  Easy")
+    print("3) 20/100.  Medium")
+    print("4) 20/100.  Hard")
+    print("5) 20/100.  Very Hard")
+    print("6) 101/100  Expert")
+    print("7) ???/100  Random")
+    print("8) Back")
 
     next_Menu = None
 
@@ -103,14 +121,34 @@ def newGame_aiDifficulty():
         next_Menu = get_ch().lower()
 
         if next_Menu == '1':
-            aiDifficulty = AI_EASY
+            aiDifficulty = 0
             os.system("clear")
             return MENU_NEW_GAME_AISPEED
         elif next_Menu == '2':
-            aiDifficulty = AI_HARD
+            aiDifficulty = 20
             os.system("clear")
             return MENU_NEW_GAME_AISPEED
         elif next_Menu == '3':
+            aiDifficulty = 40
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '4':
+            aiDifficulty = 60
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '5':
+            aiDifficulty = 80
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '6':
+            aiDifficulty = 100
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '7':
+            aiDifficulty = -1
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '8':
             os.system("clear")
             return MENU_NEW_GAME_MAPSIZE
         else:
@@ -279,5 +317,6 @@ if __name__ == "__main__":
         elif next_Menu == MENU_EXECUTE_GAME:
             next_Menu = gamestate.game_state(mapSize, aiSpeed, aiDifficulty)
         elif next_Menu == MENU_QUIT:
+            os.system("clear")
             break
     #os.system("clear")

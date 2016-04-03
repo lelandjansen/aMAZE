@@ -21,17 +21,23 @@ class Leaderboard:
                 f.write(line)
 
     def addUser(self, name, score):
+        if name == '':
+            name = ""
+        inserted = False
         length = len(self.users)
         if length > 10:
             length = 10
+        if length == 0:
+            self.users.append((name, str(score)))
         for i in range(length):
-            userScore = int(self.users[i][1])
-            print(i)
+            userScore = int(float(self.users[i][1]))
             if userScore < score:
-                print("ran")
+                inserted = True
                 newUser = (name, str(score))
                 self.users.insert(i, newUser)
                 break
+        if not inserted:
+            self.users.append((name,str(score)))
         if len(self.users) > 10:
             self.users.pop()
 
@@ -40,7 +46,7 @@ class Leaderboard:
         i = 1
         for user in self.users:
             a = str(user[0])
-            b = str(user[1])
+            b = str(int(float(user[1])))
             out += "|%2i" % int(i) + "|%-11s|%-11s|" % (a, b) + '\n'
             i += 1
         return out

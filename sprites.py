@@ -39,6 +39,12 @@ class Player:
             self.activeNode = self.nodes.pop(0)
             self.moving = True
 
+    # Clears the path and stops the Player
+    def clearPath(self):
+        self.moving = False
+        self.activeNode = None
+        self.nodes = None
+
     # returns the node the player is at or is moving away from
     def getNode(self):
         return (self.nodex, self.nodey)
@@ -54,7 +60,6 @@ class Player:
     # Moves the player towards the next node in the path that it has,
     # if this path exists
     def move(self):
-
         # If the player has a destanation and should be moving
         if self.activeNode is not None and self.moving:
 
