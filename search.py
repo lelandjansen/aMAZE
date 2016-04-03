@@ -161,7 +161,8 @@ def mazeAI(maze, start, end, difficulty):
         KeyError("Start node " + str(start) + " not in maze.")
     if end not in graph:
         KeyError("End node "   + str(end)   + " not in maze.")
-
+    if difficulty < -1 or 101 < difficulty:
+        ValueError("Difficulty must be between 0 and 100 (inclusive).")
 
 
     def dfsPath(node, end):
