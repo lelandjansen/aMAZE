@@ -161,6 +161,9 @@ def dfsPath(maze, start, end, difficulty):
                 if not dfs.found:
                     dfs.path += [succ]
 
+                if abs(path[-1][0] - path[-2][0]) == 1 and abs(path[-1][1] - path[-2][1]) == 1:
+                    print("SKIP!!!")
+
     dfs.path    = path
     dfs.visited = visited
     dfs.found   = found
@@ -192,23 +195,23 @@ def randomSearch(maze, start, end, path=[]):
 
     if path[-1] is not end:
         path += path[::-1]
-        path += find_path(graph, start, end)
+        path += find_path(maze, start, end)
 
     return path
 
 
 
 
-mazeSize   = (32, 32)
-startCoord = (0,0)
-endCoord   = (31,31)
-
-
-myMaze = Maze(mazeSize[0],mazeSize[1])
-myMaze.generateMaze()
-myGraph = myMaze.graph()
-
-
+# mazeSize   = (16, 16)
+# startCoord = (3,3)
+# endCoord   = (12,12)
+#
+#
+# myMaze = Maze(mazeSize[0],mazeSize[1])
+# myMaze.generateMaze()
+# myGraph = myMaze.graph()
+#
+#
 # scoreList = []
 #
 # for x in range(mazeSize[0]):
@@ -226,35 +229,35 @@ myGraph = myMaze.graph()
 #         print("   " + str(number), end="")
 #     print()
 #     print()
-
-
-
-
-
-
-
-
-# n = 100000
-# result = {}
-# for i in range(n):
-#     answer = getBiasPoint(myMaze, endCoord, 50)
-#     if answer in result:
-#         result[answer] += 1
-#     else:
-#         result[answer] = 1
 #
-# print("Expected: " + str(1/len(result)))
 #
-# for r in result:
-#     print(str(r) + ": " + str(result[r]/n))
-
-
-for difficulty in range(0,101):
-    l = []
-    for t in range(10000):
-        l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
-    # print("Difficulty " + str(difficulty) + ": " + str(sum(l) / len(l)))
-    print(sum(l)/len(l))
+#
+#
+#
+#
+#
+#
+# # n = 100000
+# # result = {}
+# # for i in range(n):
+# #     answer = getBiasPoint(myMaze, endCoord, 50)
+# #     if answer in result:
+# #         result[answer] += 1
+# #     else:
+# #         result[answer] = 1
+# #
+# # print("Expected: " + str(1/len(result)))
+# #
+# # for r in result:
+# #     print(str(r) + ": " + str(result[r]/n))
+#
+#
+# for difficulty in range(0,101):
+#     l = []
+#     for t in range(1000):
+#         l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
+#     # print("Difficulty " + str(difficulty) + ": " + str(sum(l) / len(l)))
+#     print(sum(l)/len(l))
 
 
 

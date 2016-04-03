@@ -8,6 +8,7 @@ import time
 import getch
 from generateMaze import Maze
 import gamestate
+from leaderboard import Leaderboard
 # Enumeration for menu states
 MENU_MAIN = '0'
 MENU_NEW_GAME_MAPSIZE = '1'
@@ -42,17 +43,6 @@ get_ch = getch._Getch()
 
 # Starts Pygame and all that fun stuff
 def start_game():
-
-    print("Map Size:      " + str(mapSize))
-    print("AI Difficulty: " + str(aiDifficulty))
-    print("AI Speed:      " + str(aiSpeed))
-    print()
-    print("Generating Maze.")
-    time.sleep(1)
-    global mazeGraph
-    mazeGraph = Maze(mapSize, mapSize)
-    mazeGraph.generateMaze()
-    mazeGraph.exportMaze()
     os.system("clear")
     #os.system("xdg-open maze.png")
     return MENU_EXECUTE_GAME
@@ -168,6 +158,10 @@ def newGame_MapSize():
 # Menu for displaying the leaderboards
 def leaderboards():
     os.system("clear")
+
+    users = Leaderboard()
+    users.readLeaderboard()
+
     print("===========================")
     print("=          aMAZE          =")
     print("===========================")
@@ -175,13 +169,12 @@ def leaderboards():
     print("===========================")
     print()
     print()
-    print("TO BE IMPLEMENTED")
-    print()
-    print()
+    print("|# |   Name    |  Score   |")
+    print("===========================")
+    print(users)
     print("1) Back ")
 
     next_Menu = None
-
     while next_Menu == None:
         next_Menu = get_ch().lower()
 
@@ -267,7 +260,7 @@ if __name__ == "__main__":
     os.system("clear")
 
     next_Menu = main_Menu()
-    
+
     while True:
         if next_Menu == MENU_MAIN:
             next_Menu = main_Menu()
@@ -284,7 +277,7 @@ if __name__ == "__main__":
         elif next_Menu == MENU_START_GAME:
             next_Menu = start_game()
         elif next_Menu == MENU_EXECUTE_GAME:
-            next_Menu = gamestate.game_state(mazeGraph, mapSize)
+            next_Menu = gamestate.game_state(mapSize, aiSpeed, aiDifficulty)
         elif next_Menu == MENU_QUIT:
             break
     #os.system("clear")

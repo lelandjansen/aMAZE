@@ -86,7 +86,13 @@ class Player:
                 # Otherwise get the next node in the list and continue moving
                 else:
                     self.activeNode = self.nodes.pop(0)
+    # Jumps the player to a specified node
+    def jump(self,node):
+        self.nodex = node[0]
+        self.nodey = node[1]
 
+        self.x = (self.nodex)*32+16
+        self.y = (self.nodey)*32+16
     # Draw the player to the screen
     def render(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), PLAYER_RADIUS, 0)

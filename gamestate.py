@@ -1,10 +1,62 @@
 import pygame
 import sys
 import os
+import random
+
 from pygame.locals import *
+
+import generateMaze
+import search
+
 from generateMaze import Maze
 from sprites import Player
-def game_state(maze, mapSize):
+from aMAZE import aiDifficulty
+from aMAZE import aiSpeed
+maze = None
+endpoint = None
+startpoint = None
+score = 0
+
+# Updates the console with the score
+def update_console(rounds=0):
+    #os.system("clear")
+    print("===========================")
+    print("=          aMAZE          =")
+    print("===========================")
+    print("  Score: || " + str(rounds))
+
+# Generates a new maze, a new start and end point, a new AI path
+def new_round(mapSize):
+
+    global maze
+    global endpoint
+    global startpoint
+    maze = Maze(mapSize, mapSize)
+    maze.generateMaze()
+    maze.exportMaze()
+    #endpoint = (random.choice([mapSize-1,mapSize-2, 1, 0]),random.choice([mapSize-1,mapSize-2, 1, 0]))
+    endpoint = (0,0)
+    startpoint = (mapSize-1, mapSize-1)
+    #startpoint = (random.choice([int(mapSize/2),int(mapSize/2)+1,int(mapSize/2)-1]), \
+                  #random.choice([int(mapSize/2),int(mapSize/2)+1,int(mapSize/2)-1]))
+    aiPath = search.dfsPath(maze, endpoint, startpoint, 100)
+    generateMaze.display_ai(maze, aiPath)
+
+    for i in range(len(aiPath)-2):
+        if abs(aiPath[i][0] - aiPath[i+1][0]) and abs(aiPath[i][1] - aiPath[i+1][1]):
+            print("wtf is happening")
+
+# The actual game state where all the magic happens
+def game_state(mapSize, aiSpeed, aiDifficulty):
+
+    global maze
+    global endpoint
+    global startpoint
+    global score
+
+    score = 0
+
+    new_round(mapSize)
 
     # Running flag
     running = True
@@ -15,13 +67,14 @@ def game_state(maze, mapSize):
     pygame.display.set_caption('aMAZE - The best game ever')
 
     # Setup sprites
+    user = Player(startpoint[0], startpoint[1] , (0,255,0), 4)
     maze_spr = pygame.image.load("maze.png")
-    user = Player(1 , 1 , (0,255,0), 1)
 
     # Set an FPS limit so PyGame doesn't destroy the CPU and create a singularity
     FPS = 60
     clock = pygame.time.Clock()
 
+    update_console()
     # main game loop
     while running:
 
@@ -63,10 +116,21 @@ def game_state(maze, mapSize):
 
         user.move()
 
+
         # Render the scene
         screen.blit(maze_spr,(0,0))
+        pygame.draw.rect(screen, (0, 255, 255), (endpoint[0]*32+8,endpoint[1]*32+8,16,16), 0)
         user.render(screen)
         pygame.display.update()
+
+        # Check to see if the user won the round
+        if user.atNode(endpoint):
+            score += aiSpeed*aiDifficulty + mapSize/4
+            update_console(score)
+            new_round(mapSize)
+            user.jump(startpoint)
+            maze_spr = pygame.image.load("maze.png")
+
 
         # Limit the framerate
         clock.tick(FPS)
