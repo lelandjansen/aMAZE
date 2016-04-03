@@ -43,27 +43,51 @@ def getBiasPoint(maze, end, difficulty):
 
     if biasScore is 0:
         return end
+    #
+    # biasPoint = [0, 0]
+    #
+    # # Runtime: O(farthestPointScore) worst case
+    # stepsRemaining = biasScore
+    # while stepsRemaining:
+    #     i = random.choice([0, 1])
+    #     bound = end[i] if stepsRemaining > end[i] else stepsRemaining
+    #     steps = random.randint(1, bound)
+    #     biasPoint[i] += steps
+    #     stepsRemaining -= steps
+    #
+    # reflections = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+    # random.shuffle(reflections)
+    # for r in reflections:
+    #     x, y = end[0] + r[0]*biasPoint[0], end[1] + r[1]*biasPoint[1]
+    #     if 0 <= x and x < maze.get_sizex() and 0 <= y and y < maze.get_sizey():
+    #        return (x, y)
 
-    biasPoint = [0, 0]
 
-    # Runtime: O(farthestPointScore) worst case
-    stepsRemaining = biasScore
-    while stepsRemaining:
-        i = random.choice([0, 1])
-        bound = end[i] if stepsRemaining > end[i] else stepsRemaining
-        steps = random.randint(1, bound)
-        biasPoint[i] += steps
-        stepsRemaining -= steps
+    points = []
 
-    reflections = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
-    random.shuffle(reflections)
-    for r in reflections:
-        x, y = end[0] + r[0]*biasPoint[0], end[1] + r[1]*biasPoint[1]
+    p = [-biasScore, 0]
+    for i in range(4*biasScore):
+        x, y = p[0] + end[0], p[1] + end[1]
         if 0 <= x and x < maze.get_sizex() and 0 <= y and y < maze.get_sizey():
-           return (x, y)
+            points.append((x, y))
+        case = i//biasScore
+        if case is 0:
+            p[0] += 1
+            p[1] += 1
+        elif case is 1:
+            p[0] += 1
+            p[1] -= 1
+        elif case is 2:
+            p[0] -= 1
+            p[1] -= 1
+        elif case is 3:
+            p[0] -= 1
+            p[1] += 1
 
+    if not points:
+        print("EMPTY")
 
-
+    return random.choice(points)
 
 
 
@@ -99,8 +123,8 @@ def find_path(maze, start, end, path=[]):
 
 def dfsPath(maze, start, end, difficulty):
 
-    print("difficulty: " + str(difficulty))
-    print("end: " + str(end))
+    # print("difficulty: " + str(difficulty))
+    # print("end: " + str(end))
 
     graph = maze.graph()
 
@@ -115,7 +139,6 @@ def dfsPath(maze, start, end, difficulty):
 
     if difficulty is not -1:
         biasPoint = getBiasPoint(maze, end, difficulty)
-        print(biasPoint)
 
     def dfs(node, end):
         visited.add(node)
@@ -211,27 +234,27 @@ for i in range(len(scoreList)):
 
 
 
-n = 100000
-result = {}
-for i in range(n):
-    answer = getBiasPoint(myMaze, endCoord, 0)
-    if answer in result:
-        result[answer] += 1
-    else:
-        result[answer] = 1
+# n = 100000
+# result = {}
+# for i in range(n):
+#     answer = getBiasPoint(myMaze, endCoord, 50)
+#     if answer in result:
+#         result[answer] += 1
+#     else:
+#         result[answer] = 1
+#
+# print("Expected: " + str(1/len(result)))
+#
+# for r in result:
+#     print(str(r) + ": " + str(result[r]/n))
 
-print("Expected: " + str(1/len(result)))
 
-for r in result:
-    print(str(r) + ": " + str(result[r]/n))
-
-
-
-# for difficulty in range(0,101,5):
-#     l = []
-#     for t in range(10):
-#         l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
-#     print("Difficulty " + str(d) + ": " + str(sum(l) / len(l)))
+for difficulty in range(0,101):
+    l = []
+    for t in range(1000):
+        l.append(len(dfsPath(myMaze, startCoord, endCoord, difficulty)))
+    # print("Difficulty " + str(difficulty) + ": " + str(sum(l) / len(l)))
+    print(sum(l)/len(l))
 
 
 
