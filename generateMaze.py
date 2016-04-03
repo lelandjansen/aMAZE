@@ -221,3 +221,93 @@ def display_ai(maze, path=[]):
         r -= changeamnt
         b += changeamnt
     MazeSurface.write_to_png("AI.png")
+
+# def display_path_process(maze, path=[]):
+#     filenumber = 0
+#     MazeSurface = cairo.ImageSurface(cairo.FORMAT_RGB24, nodeSize*maze.sizex, nodeSize*maze.sizey)
+#     surfaceHandle = cairo.Context(MazeSurface)
+#
+#     # Set whole surface black
+#     surfaceHandle.set_source_rgb(0,0,0)
+#
+#     # Set the surface up for paining white walls
+#     surfaceHandle.paint()
+#     surfaceHandle.set_source_rgb(1,1,1)
+#     surfaceHandle.set_line_width(wallSize)
+#
+#
+#     for node in maze.maze:
+#         # Wall flags for this node
+#         top = False
+#         bottom = False
+#         left = False
+#         right = False
+#
+#         x = node[0]
+#         y = node[1]
+#
+#         neighbors = maze.maze[node]
+#         for neighbor in neighbors:
+#
+#             dx = neighbor[0]-x
+#             dy = neighbor[1]-y
+#
+#             # Node is above
+#             if dx == 0 and dy == 1:
+#                 top = True
+#             if dx == 0 and dy == -1:
+#                 bottom = True
+#             if dx == 1 and dy == 0:
+#                 right = True
+#             if dx == -1 and dy == 0:
+#                 left = True
+#
+#         if not top:
+#
+#             surfaceHandle.move_to(x*nodeSize,y*nodeSize+nodeSize)
+#             surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
+#
+#         if not bottom:
+#
+#             surfaceHandle.move_to(x*nodeSize,y*nodeSize)
+#             surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize)
+#
+#
+#         if not left:
+#
+#             surfaceHandle.move_to(x*nodeSize,y*nodeSize)
+#             surfaceHandle.line_to(x*nodeSize,y*nodeSize+nodeSize)
+#
+#         if not right:
+#
+#             surfaceHandle.move_to(x*nodeSize+nodeSize,y*nodeSize)
+#             surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
+#
+#     surfaceHandle.stroke()
+#     changeamnt = float(1)/float(len(path))
+#     r = 1
+#     b = 0
+#     surfaceHandle.set_source_rgb(r, 0, b)
+#     skipFirst = True
+#     for node in path:
+#         surfaceHandle.set_source_rgb(r, 0, b)
+#         if skipFirst:
+#             skipFirst = False
+#             curNode = node
+#             surfaceHandle.move_to(curNode[0]*32+16, curNode[1]*32+16)
+#             surfaceHandle.
+#         else:
+#             prevNode = curNode
+#             curNode = node
+#             surfaceHandle.move_to(prevNode[0]*32+16, prevNode[1]*32+16)
+#             surfaceHandle.line_to(curNode[0]*32+16, curNode[1]*32+16)
+#             #surfaceHandle.line_to(curNode[0]*32+10, curNode[1]*32+10)
+#             #surfaceHandle.move_to(curNode[0]*32+16, curNode[1]*32+16)
+#             surfaceHandle.stroke()
+#             name = "AI-" + str(filenumber) + ".png"
+#             print(name)
+#             MazeSurface.write_to_png(name)
+#             filenumber += 1
+#
+#         r -= changeamnt
+#         b += changeamnt

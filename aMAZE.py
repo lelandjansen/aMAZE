@@ -106,14 +106,16 @@ def newGame_aiDifficulty():
     print("===========================")
     print()
     print()
-    print("1) 0/100.   Very Easy ")
-    print("2) 20/100.  Easy")
-    print("3) 20/100.  Medium")
-    print("4) 20/100.  Hard")
-    print("5) 20/100.  Very Hard")
-    print("6) 101/100  Expert")
-    print("7) ???/100  Random")
-    print("8) Back")
+    print("1) 0/100    Very Easy ")
+    print("2) 20/100   Easy")
+    print("3) 40/100   Medium")
+    print("4) 60/100   Hard")
+    print("5) 80/100   Very Hard")
+    print("6) 100/100  Advanced")
+    print("7) 101/100  Expert")
+    print("8) ???/100  Random")
+    print("9) !!!/100  Chuck Norris")
+    print("0)          Back")
 
     next_Menu = None
 
@@ -145,10 +147,18 @@ def newGame_aiDifficulty():
             os.system("clear")
             return MENU_NEW_GAME_AISPEED
         elif next_Menu == '7':
-            aiDifficulty = -1
+            aiDifficulty = 101
             os.system("clear")
             return MENU_NEW_GAME_AISPEED
         elif next_Menu == '8':
+            aiDifficulty = -1
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '9':
+            aiDifficulty = -2
+            os.system("clear")
+            return MENU_NEW_GAME_AISPEED
+        elif next_Menu == '0':
             os.system("clear")
             return MENU_NEW_GAME_MAPSIZE
         else:

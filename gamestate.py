@@ -42,10 +42,13 @@ def new_round(mapSize, aiDifficulty):
     startpoint = (random.choice([int(mapSize/2),int(mapSize/2)+1,int(mapSize/2)-1]), \
                   random.choice([int(mapSize/2),int(mapSize/2)+1,int(mapSize/2)-1]))
 
-    aiPath = search.dfsPath(maze, startpoint, endpoint, aiDifficulty)
+    if aiDifficulty == -2:
+        aiPath = [startpoint, endpoint]
+    else:
+        aiPath = search.mazeAI(maze, startpoint, endpoint, aiDifficulty)
     print(aiPath)
     generateMaze.display_ai(maze, aiPath)
-
+    # generateMaze.display_path_process(maze, aiPath)
 # The actual game state where all the magic happens
 def game_state(mapSize, aiSpeed, aiDifficulty):
 

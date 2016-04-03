@@ -48,7 +48,7 @@ def getBiasPoint(maze, end, difficulty):
                size[1] - 2*(size[1]//2 - end[1]//2)
 
     # Compute AI bias score based on difficulty
-    biasScore = farthestPointScore - (difficulty * farthestPointScore) // 100
+    biasScore = maxScore - (difficulty * maxScore) // 100
 
     if biasScore is 0:
         return end
@@ -185,7 +185,7 @@ def mazeAI(maze, start, end, difficulty):
                 dfsPath.path += [end]
             elif succ not in visited:
                 dfsPath(succ, end)
-                if not dfs.found:
+                if not dfsPath.found:
                     dfsPath.path += [node]
 
 
@@ -195,10 +195,12 @@ def mazeAI(maze, start, end, difficulty):
 
         if node == end: return path
 
+        nextNode = graph[node]
         nextNode.sort(key=lambda n: \
                       abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]) )
 
         shortest = None
+        newPath = []
         for succ in nextNode:
             if succ not in visited:
                 newPath = shortestPath(succ, end, path)
@@ -208,11 +210,12 @@ def mazeAI(maze, start, end, difficulty):
 
 
     visited = set()
+    if difficulty is not -1:
+        biasPoint = getBiasPoint(maze, end, difficulty)
+
     if difficulty < 101:
         found   = dfsPath.found = False
         path    = dfsPath.path  = []
-        if difficulty is not -1:
-            biasPoint = getBiasPoint(maze, end, difficulty)
         dfsPath(start, end) # modifies path
     else:
         path = shortestPath(start, end)
