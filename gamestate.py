@@ -37,10 +37,9 @@ def new_round(mapSize, aiDifficulty):
     maze.generateMaze()
     maze.exportMaze()
 
-    endpoint = (random.choice([mapSize-1,mapSize-2, 1, 0]),random.choice([mapSize-1,mapSize-2, 1, 0]))
+    endpoint = (mapSize-1, mapSize-1)
 
-    startpoint = (random.choice([int(mapSize/2),int(mapSize/2)+1,int(mapSize/2)-1]), \
-                  random.choice([int(mapSize/2),int(mapSize/2)+1,int(mapSize/2)-1]))
+    startpoint = (0,0)
 
     if aiDifficulty == -2:
         aiPath = [startpoint, endpoint]

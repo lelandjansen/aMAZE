@@ -192,21 +192,22 @@ def mazeAI(maze, start, end, difficulty):
 
     # find shortest path using breadth-first search
     def shortestPath(start, end):
-        queue = deque([start])
+        queue = deque([[start]])
         visited = set()
 
         while queue:
-            path = queue.popeft()
+            path = queue.popleft()
             node = path[-1]
             if node == end:
                 return path
             elif node not in visited:
-                nextNode = graph[curr]
+                visited.add(node)
+                nextNode = graph[node]
                 nextNode.sort(key=lambda n: \
                               abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]) )
                 for succ in nextNode:
                     newPath = list(path)
-                    newPath.apend(succ)
+                    newPath.append(succ)
                     queue.append(newPath)
 
         return path
