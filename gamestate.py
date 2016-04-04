@@ -1,3 +1,8 @@
+# Gamestate.py
+# By: Michael Steer
+
+# Contains the actual game that the user plays
+
 import pygame
 import sys
 import os
@@ -12,15 +17,17 @@ import search
 from generateMaze import Maze
 from sprites import Player
 
-maze = None
-endpoint = None
-startpoint = None
-aiPath = None
-score = 0
+# Globals
+maze = None                 # The maze that the user navigate
+endpoint = None             # Where the user and AI end
+startpoint = None           # Where the user and AI start
+aiPath = None               # The path the AI takes from start to end
+score = 0                   # The users score
 
 # Updates the console with the score
 def update_console(rounds=0):
-    #os.system("clear")
+    os.system("clear")
+
     print("===========================")
     print("=          aMAZE          =")
     print("===========================")
@@ -33,21 +40,22 @@ def new_round(mapSize, aiDifficulty):
     global endpoint
     global startpoint
     global aiPath
+
+    # Generate a new maze
     maze = Maze(mapSize, mapSize)
     maze.generateMaze()
     maze.exportMaze()
 
+    # Set a startpoint and endpoint for the user
     endpoint = (mapSize-1, mapSize-1)
-
     startpoint = (0,0)
 
+    # Set the path the AI follows
     if aiDifficulty == -2:
         aiPath = [startpoint, endpoint]
     else:
         aiPath = search.mazeAI(maze, startpoint, endpoint, aiDifficulty)
-    print(aiPath)
-    generateMaze.display_ai(maze, aiPath)
-    # generateMaze.display_path_process(maze, aiPath)
+
 # The actual game state where all the magic happens
 def game_state(mapSize, aiSpeed, aiDifficulty):
 
@@ -56,8 +64,14 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
     global startpoint
     global score
 
+    # Set an FPS limit so PyGame doesn't destroy the CPU and create a singularity
+    FPS = 60
+    clock = pygame.time.Clock()
+
+    # Start with no score
     score = 0
 
+    # Generate an initial set of conditions
     new_round(mapSize, aiDifficulty)
 
     # Running flag
@@ -68,16 +82,17 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
     screen = pygame.display.set_mode((32*maze.get_sizex(), 32*maze.get_sizey()))
     pygame.display.set_caption('aMAZE - The best game ever')
 
+    # Setup the User and the AI
     user = Player(startpoint[0], startpoint[1] , (0,255,0), 4)
     enemy = Player(startpoint[0], startpoint[1], (255,0,0), aiSpeed)
     enemy.setNodes(aiPath)
+
+    # Load the maze
     maze_spr = pygame.image.load("maze.png")
 
-    # Set an FPS limit so PyGame doesn't destroy the CPU and create a singularity
-    FPS = 60
-    clock = pygame.time.Clock()
-
+    # Update the console with score information
     update_console()
+
     # main game loop
     while running:
 
@@ -117,41 +132,61 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
             if nextNode in neighbors:
                 user.setNodes([nextNode])
 
+        # Move the user and the AI
         user.move()
         enemy.move()
+
 
         # Render the scene
         screen.blit(maze_spr,(0,0))
         pygame.draw.rect(screen, (0, 255, 255), (endpoint[0]*32+8,endpoint[1]*32+8,16,16), 0)
 
+        # Render the user and the AI
         enemy.render(screen)
         user.render(screen)
+
+        # Flip the display buffer
         pygame.display.update()
 
-        # Check to see if the user won the round
+        # Check to see if the user beat the AI to the end
         if user.atNode(endpoint) and not enemy.atNode(endpoint):
-            if aiDifficulty == 101:
+
+            # Don't increment the Difficulty if its maxed out or a special
+            # Variant
+            if aiDifficulty in [101, -1, -2]:
                 pass
             else:
+
+                # Up the difficulty
                 aiDifficulty += 1
 
-            score += int(aiDifficulty/100)*aiSpeed + mapSize/4
-            update_console(score)
+                # Increase the users score depending on the difficulty
+                score += int(aiDifficulty/100)*aiSpeed + mapSize/4
 
-            new_round(mapSize, aiDifficulty)
+                # Update the console with this new score
+                update_console(score)
 
-            user.jump(startpoint)
-            enemy.clearPath()
-            enemy.setNodes(aiPath)
+                # Generate a new set of conditions
+                new_round(mapSize, aiDifficulty)
 
-            enemy.jump(startpoint)
+                # Move the User and player back to the start and update the
+                # AI path
+                user.jump(startpoint)
+                enemy.clearPath()
+                enemy.setNodes(aiPath)
+                enemy.jump(startpoint)
 
-            maze_spr = pygame.image.load("maze.png")
+                # Update the maze
+                maze_spr = pygame.image.load("maze.png")
+
+                # Check to see if the AI Beat the user to the end
         elif enemy.atNode(endpoint) and not user.atNode(endpoint):
+            # Quit the game and run the gameover State
             pygame.quit()
             os.system("clear")
             running = False
             aMAZE.game_over(score)
+
         # Limit the framerate
         clock.tick(FPS)
 

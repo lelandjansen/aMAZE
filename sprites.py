@@ -1,3 +1,8 @@
+# Sprites.py
+# By Michael Steer
+
+# Contains the Player class
+
 import pygame
 import sys
 from pygame.locals import *

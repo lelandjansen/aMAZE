@@ -1,6 +1,6 @@
 # aMAZE.py
-# The entry point for the program
-
+# By: Michael Steer
+# The entry point for the program. Contains all the menu code
 
 # Imports
 import os
@@ -9,6 +9,7 @@ import getch
 from generateMaze import Maze
 import gamestate
 from leaderboard import Leaderboard
+
 # Enumeration for menu states
 MENU_MAIN = '0'
 MENU_NEW_GAME_MAPSIZE = '1'
@@ -24,21 +25,23 @@ MAP_SMALL = 8               # Small map. 8x8 tiles (64 total)
 MAP_MEDIUM = 16             # Medium map. 16x16 tiles (256 total)
 MAP_LARGE = 32              # Large map. 32 x 32 tiles ()
 
-AI_SLOW = 2
-AI_FAST = 4
+AI_SLOW = 2                 # Slow AI speed. Two tiles per second
+AI_FAST = 4                 # Fast AI Speed. Four tiles per second, same as
+                            # the player
 
 # Globals
 mapSize = None              # The size of the map to be generated
 aiDifficulty = None         # The Intellegence flag of the AI
 aiSpeed = None              # The speed of the ai
-mazeGraph = None
 
 # Pointer to function that pulls a single character from
 # the console (see getch.py)
 get_ch = getch._Getch()
 
+# Game over menu
 def game_over(score):
     os.system("clear")
+
     print("===========================")
     print("=          aMAZE          =")
     print("===========================")
@@ -47,8 +50,11 @@ def game_over(score):
     print("= Enter your Name         =")
     print("=       10 Characters max =")
     print("===========================")
+
+    # Get the users name
     name = input()
 
+    # Update the leaderboard with the user that just played
     leaderboard = Leaderboard()
     leaderboard.readLeaderboard()
     leaderboard.addUser(name, score)
@@ -57,13 +63,15 @@ def game_over(score):
 # Starts Pygame and all that fun stuff
 def start_game():
     os.system("clear")
-    #os.system("xdg-open maze.png")
     return MENU_EXECUTE_GAME
 
 # Menu for selecting the ai Speed
 def newGame_aiSpeed():
+
     global aiSpeed
+
     os.system("clear")
+
     print("===========================")
     print("=          aMAZE          =")
     print("===========================")
@@ -77,6 +85,7 @@ def newGame_aiSpeed():
 
     next_Menu = None
 
+    # Get the next menu from the user
     while next_Menu == None:
         next_Menu = get_ch().lower()
 
@@ -96,7 +105,9 @@ def newGame_aiSpeed():
 
 # Menu for selecting the ai Difficulty
 def newGame_aiDifficulty():
+
     global aiDifficulty
+
     os.system("clear")
 
     print("===========================")
@@ -119,6 +130,7 @@ def newGame_aiDifficulty():
 
     next_Menu = None
 
+    # Get the next menu from the user
     while next_Menu == None:
         next_Menu = get_ch().lower()
 
@@ -166,8 +178,11 @@ def newGame_aiDifficulty():
 
 # Menu for selecting the map size
 def newGame_MapSize():
+
     global mapSize
+
     os.system("clear")
+
     print("===========================")
     print("=          aMAZE          =")
     print("===========================")
@@ -182,6 +197,7 @@ def newGame_MapSize():
 
     next_Menu = None
 
+    # Get the next menu from the user
     while next_Menu == None:
         next_Menu = get_ch().lower()
 
@@ -205,8 +221,10 @@ def newGame_MapSize():
 
 # Menu for displaying the leaderboards
 def leaderboards():
+
     os.system("clear")
 
+    # Load the leaderboard
     users = Leaderboard()
     users.readLeaderboard()
 
@@ -219,10 +237,15 @@ def leaderboards():
     print()
     print("|# |   Name    |  Score   |")
     print("===========================")
+
+    # Print the leaderboard
     print(users)
+
     print("1) Back ")
 
     next_Menu = None
+
+    # Get the next menu from the user
     while next_Menu == None:
         next_Menu = get_ch().lower()
 
@@ -234,7 +257,9 @@ def leaderboards():
 
 # Menu for displaying information about the game
 def about():
+
     os.system("clear")
+
     print("===========================")
     print("=          aMAZE          =")
     print("===========================")
@@ -268,6 +293,7 @@ def about():
 
     next_Menu = None
 
+    # Get the next menu
     while next_Menu == None:
         next_Menu = get_ch().lower()
 
@@ -294,6 +320,7 @@ def main_Menu():
     print("3) About")
     print("Q) Quit")
 
+    # Get the next menu
     while next_Menu == None:
         next_Menu = get_ch().lower()
         if next_Menu in ['1','2','3','q']:
@@ -309,6 +336,8 @@ if __name__ == "__main__":
 
     next_Menu = main_Menu()
 
+    # Continue looping through menus and gamestates forever, or until the user
+    # chooses to quit
     while True:
         if next_Menu == MENU_MAIN:
             next_Menu = main_Menu()
