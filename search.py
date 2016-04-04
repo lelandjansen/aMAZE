@@ -8,6 +8,7 @@
 import sys
 import random
 # random.seed(8)
+from queue import deque
 
 from generateMaze import Maze
 
@@ -189,24 +190,27 @@ def mazeAI(maze, start, end, difficulty):
                     dfsPath.path += [node]
 
 
-    def shortestPath(node, end, path=[]):
-        visited.add(node)
-        path += [node]
+    # find shortest path using breadth-first search
+    def shortestPath(start, end):
+        queue = deque([start])
+        visited = set()
 
-        if node == end: return path
+        while queue:
+            path = queue.popeft()
+            node = path[-1]
+            if node == end:
+                return path
+            elif node not in visited:
+                nextNode = graph[curr]
+                nextNode.sort(key=lambda n: \
+                              abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]) )
+                for succ in nextNode:
+                    newPath = list(path)
+                    newPath.apend(succ)
+                    queue.append(newPath)
 
-        nextNode = graph[node]
-        nextNode.sort(key=lambda n: \
-                      abs(n[0]-biasPoint[0]) + abs(n[1]-biasPoint[1]) )
+        return path
 
-        shortest = None
-        newPath = []
-        for succ in nextNode:
-            if succ not in visited:
-                newPath = shortestPath(succ, end, path)
-            if newPath and (not shortest or len(newPath) < len(shortest)):
-                shortest = newPath
-        return shortest
 
 
     visited = set()
