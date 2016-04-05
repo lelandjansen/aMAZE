@@ -147,7 +147,6 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
 
         # Flip the display buffer
         pygame.display.update()
-
         # Check to see if the user beat the AI to the end
         if user.atNode(endpoint) and not enemy.atNode(endpoint):
 
@@ -160,24 +159,24 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
                 # Up the difficulty
                 aiDifficulty += 1
 
-                # Increase the users score depending on the difficulty
-                score += int(aiDifficulty/100)*aiSpeed + mapSize/4
+            # Increase the users score depending on the difficulty
+            score += int(aiDifficulty/100)*aiSpeed + mapSize/4
 
-                # Update the console with this new score
-                update_console(score)
+            # Update the console with this new score
+            update_console(score)
 
-                # Generate a new set of conditions
-                new_round(mapSize, aiDifficulty)
+            # Generate a new set of conditions
+            new_round(mapSize, aiDifficulty)
 
-                # Move the User and player back to the start and update the
-                # AI path
-                user.jump(startpoint)
-                enemy.clearPath()
-                enemy.setNodes(aiPath)
-                enemy.jump(startpoint)
+            # Move the User and player back to the start and update the
+            # AI path
+            user.jump(startpoint)
+            enemy.clearPath()
+            enemy.setNodes(aiPath)
+            enemy.jump(startpoint)
 
-                # Update the maze
-                maze_spr = pygame.image.load("maze.png")
+            # Update the maze
+            maze_spr = pygame.image.load("maze.png")
 
                 # Check to see if the AI Beat the user to the end
         elif enemy.atNode(endpoint) and not user.atNode(endpoint):
