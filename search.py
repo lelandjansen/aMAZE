@@ -6,8 +6,9 @@
 #  and https://www.python.org/doc/essays/graphs/
 
 import sys
+import time
 import random
-# random.seed(8)
+random.seed(8)
 from queue import deque
 
 from generateMaze import Maze
@@ -15,6 +16,8 @@ from generateMaze import Maze
 recursionLimit = 1000000
 sys.setrecursionlimit(recursionLimit)
 
+#!!!!!!!!!!!!!!!!!!!!!
+runtime = 0
 
 # Computes variable-difficulty AI bias point based on difficulty
 def getBiasPoint(maze, end, difficulty):
@@ -167,7 +170,8 @@ def mazeAI(maze, start, end, difficulty):
 
 
     def dfsPath(node, end):
-
+        global runtime
+        runtime += 1
         visited.add(node)
         if not dfsPath.found:
             dfsPath.path += [node]
@@ -192,6 +196,8 @@ def mazeAI(maze, start, end, difficulty):
 
     # find shortest path using breadth-first search
     def shortestPath(start, end):
+        global runtime
+        runtime += 1
         queue = deque([[start]])
         visited = set()
 
@@ -230,3 +236,22 @@ def mazeAI(maze, start, end, difficulty):
 
 
 # That's all folks!
+mazesize = [8, 16, 32]
+for size in mazesize:
+    maze = Maze(size, size)
+    print("Maze size: " + str(size))
+    print("Difficulty | # Iterations")
+    print("Average over 500 tries")
+
+    avg = 0
+    difficulty = 0
+    for i in range(102):
+        avg = 0
+        for j in range(500):
+            runtime = 0
+            maze.generateMaze()
+            path = mazeAI(maze, (0,0), (size-1,size-1), difficulty)
+            avg += runtime
+        avg /= 1000
+        print(str(difficulty) + " | " + str(int(avg)))
+        difficulty += 1
