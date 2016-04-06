@@ -237,21 +237,21 @@ def mazeAI(maze, start, end, difficulty):
 
 # That's all folks!
 mazesize = [8, 16, 32]
-for size in mazesize:
-    maze = Maze(size, size)
-    print("Maze size: " + str(size))
-    print("Difficulty | # Iterations")
-    print("Average over 500 tries")
-
-    avg = 0
-    difficulty = 0
-    for i in range(102):
-        avg = 0
-        for j in range(500):
-            runtime = 0
-            maze.generateMaze()
-            path = mazeAI(maze, (0,0), (size-1,size-1), difficulty)
-            avg += runtime
-        avg /= 1000
-        print(str(difficulty) + " | " + str(int(avg)))
-        difficulty += 1
+# for size in mazesize:
+#     maze = Maze(size, size)
+#     print("Maze size: " + str(size))
+#     print("Difficulty | # Iterations")
+#     print("Average over 500 tries")
+#
+#     avg = 0
+#     difficulty = 0
+#     for i in range(102):
+#         avg = 0
+#         for j in range(500):
+#             runtime = 0
+#             maze.generateMaze()
+#             path = mazeAI(maze, (0,0), (size-1,size-1), difficulty)
+#             avg += runtime
+#         avg /= 1000
+#         print(str(difficulty) + " | " + str(int(avg)))
+#         difficulty += 1

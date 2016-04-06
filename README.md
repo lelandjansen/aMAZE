@@ -28,7 +28,15 @@ Installation instructions:
   To install python 3.4 on both Unix or windows, please refer to the instructions
   on https://www.python.org
 
-  To install pyGame, please run apt-get and download the python-pygame package
+  To install pyGame and all of its dependencies, please run the following set of
+  commands. Copy and paste the below string to install all necessary libraries
+  for this project. This assumes python3 is already installed
+
+  cd ~ && sudo apt-get install mercurial && hg clone https://bitbucket.org/pygame/pygame \
+  && cd pygame && sudo apt-get install python3-dev python3-numpy libsdl-dev libsdl-image1.2-dev \
+  libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libportmidi-dev \
+  libavformat-dev libswscale-dev libjpeg-dev libfreetype6-dev && python3 setup.py build \
+  && sudo python3 setup.py install
 
   Cairo/PyCairo should already be installed on Unix Operating systems if python
   is present. If using Windows, please do the following to install CairoCFFI <WRITE_ME_LATER>
