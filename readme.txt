@@ -2,7 +2,7 @@ Overview:
   aMAZE is a game designed by Leland Jansen and Michael Steer. The
   objective of the game is to navigate your way out of a maze before
   an AI does. The game has varying degrees of difficulty, from the
-  size of the maze, to the speed of the AI, to the intellegence of
+  size of the maze, to the speed of the AI, to the intelligence of
   the AI.
 
 Controls:

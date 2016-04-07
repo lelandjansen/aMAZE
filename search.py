@@ -8,7 +8,6 @@
 import sys
 import time
 import random
-random.seed(8)
 from queue import deque
 
 from generateMaze import Maze
