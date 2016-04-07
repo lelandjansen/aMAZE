@@ -4,7 +4,6 @@
 # Generate maze using recursive backtracking
 # Sources:
 #  http://www.jamisbuck.org/presentations/rubyconf2011/index.html
-#  http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking
 
 # Please note that cairo is required for this python script to run
 # For Unix systems: This should be already installed if python 3.xx is installed
@@ -31,38 +30,78 @@ class Maze:
         self.sizey = sizey
         self.maze = None
 
-    # Generate a Maze
-    def generateMaze(self, startx=0, starty=0):
 
-        # Generate maze
-        # Runtime: O(x*y)
+
+
+    # Generate a Maze
+    # Create maze using modified DFS to create random
+    def generateMaze(self, startx=0, starty=0):
+        #
+        # Input
+        #   startx  x starting coordinate
+        #   starty  y starting coordinate
+        #
+        # Output
+        #   Maze class containing generated maze as undirected graph
+        #
+        # Runtime
+        #   = O(xy+2xy-1)
+        #   = O(3xy-1)
+        #  ~= O(xy)          (see runtime analysis for nested functions)
+        #
+        # Note
+        #   A "perfect" maze is created meaning there is a unique path to each
+        #   node in the graph and there is no discernible pattern or bias in the
+        #   generated maze.
+        #
+
+        # Generate rectangular maze nodes
+        # Runtime: O(xy)
         maze = {}
         for i in range(self.sizex):
             for j in range(self.sizey):
                 maze[(i,j)] = []
 
-
-        # Type a clever description
-        # Runtime: O(?????????????????)
+        # Recursively generate maze path using DFS
         def generatePath(x, y):
+            #
+            # Begin at start node and choose random path at each node. "Carve" a
+            #  path if the node has not yet been rached. Do this recursively
+            # until all nodes have been reached.
+            #
+            # Runtime
+            #   = O(n+e)     n = number of nodes, e = number of edges
+            #   = O(A+(A-1)  A = maze area (xy),  A-1 = xy-1
+            #   = O(2xy-1)
+            #  ~= O(xy)
+            #
 
+            # decide on random direction to create path
             #              left    right    down     up
             directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
             random.shuffle(directions)
 
+            # Loop through each random direction
             for d in directions:
                 dx, dy = x + d[0], y + d[1]
 
                 # Check that the node is in the bounds of the graph
                 if -1 < dx and dx < self.sizex and -1 < dy and dy < self.sizey:
                     if maze[(dx,dy)] == []:
+                        # If it is possible to create a path to the random
+                        #  adjacent node, do so reccursively
                         maze[(x,y)].append((dx,dy))
                         maze[(dx,dy)].append((x,y)) # undirected graph
                         generatePath(dx,dy)
 
+
         generatePath(startx, starty)
 
+        # Return maze class
         self.maze = maze
+
+
+
 
     # Print the maze to the screen
     def printMaze(self):
