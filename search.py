@@ -1,9 +1,5 @@
 # search.py
-
-# Search maze graph for path
-# Sources:
-#  Referenced dfs search algorithms written in class
-#  and https://www.python.org/doc/essays/graphs/
+# Search maze graph for path. Path length is determined by AI difficulty.
 
 import sys
 import time
@@ -88,7 +84,7 @@ def getBiasPoint(maze, end, difficulty):
 
 # An alternate algorithm for getBiasPoint that is more time and space efficient,
 #  however, the bias points are not computed with equal probability
-# Runtime: O(sizex + sizey) (worst case)
+# Runtime: O(x + y) (worst case)
 #
 # def getBiasPoint(maze, end, difficulty):
 #     # maze: Maze class
