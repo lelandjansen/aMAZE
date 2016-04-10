@@ -1,5 +1,6 @@
 # aMAZE
 
+
 ### Overview
 aMAZE is a Python-based maze game designed by
 [Leland Jansen](https://github.com/lelandjansen) and
@@ -9,6 +10,7 @@ has varying degrees of difficulty such as the maze size and "intelligence" of
 the computer.
 
 ![Randomly generated maze and "smart" AI path](/demo/6040ai.png)
+
 
 ### AI Performance
 An overview and demonstration of the AI's performance can be found
@@ -24,10 +26,12 @@ Key | Action
 → | Move Right
 0-9, Q | Menu navigation
 
+
 ### Score
 One's score is calculated based on the AI difficulty, maze size, progress
 through the maze, and number of mazes solved. A leaderboard containing this
 information is available to track progress.
+
 
 ### Installation instructions
 This game depends on the following resources:
@@ -51,8 +55,8 @@ setup.py install
 Cairo/PyCairo should already be installed on Unix Operating systems if Python
 is present.
 
-### Contributions
 
+### Contributions
 ##### [Leland Jansen](https://github.com/lelandjansen)
 - Maze generation
    - Modified depth-first search to create "perfect" maze
@@ -60,7 +64,6 @@ is present.
    - Variable-difficulty using modified depth-first search and A\* search
    - Computation of A\* bias point
    - Shortest path using breadth-first search
-
 ##### [Michael Steer](https://github.com/michaelsteer)
 - Rendering and exporting the maze
 - Menu system and state machine (Terminal)
