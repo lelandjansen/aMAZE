@@ -1,4 +1,5 @@
 # search.py
+# By Leland Jansen
 # Search maze graph for path. Path length is determined by AI difficulty.
 
 import sys
@@ -46,8 +47,7 @@ def getBiasPoint(maze, end, difficulty):
 
     # Compute AI bias score based on difficulty
     biasScore = maxScore - (difficulty * maxScore) // 100
-
-    if biasScore is 0:
+    if biasScore <= 0:
         return end
 
     # List of all nodes on the maze with score biasScore
@@ -124,11 +124,6 @@ def getBiasPoint(maze, end, difficulty):
 #         x, y = end[0] + r[0]*biasPoint[0], end[1] + r[1]*biasPoint[1]
 #         if 0 <= x and x < maze.get_sizex() and 0 <= y and y < maze.get_sizey():
 #            return (x, y)
-
-
-
-
-
 
 
 
@@ -280,5 +275,3 @@ def mazeAI(maze, start, end, difficulty):
     # Return path if maze is solvable, None otherwise
     return path if path else None
 
-
-# That's all folks!
