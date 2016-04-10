@@ -1,48 +1,69 @@
 # aMAZE
-Overview:
-  aMAZE is a game designed by Leland Jansen and Michael Steer. The
-  objective of the game is to navigate your way out of a maze before
-  an AI does. The game has varying degrees of difficulty, from the
-  size of the maze, to the speed of the AI, to the intellegence of
-  the AI.
 
-# Controls:
-  W - Move Up
-  A - Move Left
-  S - Move Down
-  D - Move Right
-  0-9, Q - Keys used to navigate the menus
+### Overview
+aMAZE is a Python-based maze game designed by
+[Leland Jansen](https://github.com/lelandjansen) and
+[Michael Steer](https://github.com/michaelsteer). The objective of the game is
+to navigate out of a maze while competing against a computer opponent. The game
+has varying degrees of difficulty such as the maze size and "intelligence" of
+the computer.
 
-# Score:
-  A score is calculated based on the difficulty of the maze and AI,
-  along with how far into the current maze you are and how many mazes
-  you have successfully navigated. A leaderboard containing this
-  information is available to track progress
+![Randomly generated maze and "smart" AI path](/demo/6040ai.png)
 
-# Installation instructions:
-  This game depends that the following resources are present.
-  - Python 3.4
-  - PyGame and its dependencies
-  - Cairo
+### AI Performance
+An overview and demonstration of the AI's performance can be found
+[here](http://www.lelandjansen.com/project/amaze)
+http://www.lelandjansen.com/project/amaze
 
-  To install pyGame and all of its dependencies, please run the following command.
-  Copy and paste the string below to install all necessary libraries
-  for this project. This assumes python3 is already installed
+### Controls
+Key | Action
+--- | ---
+↑ | Move Up
+↓ | Move Down
+← | Move Left
+→ | Move Right
+0-9, Q | Menu navigation
 
-  cd ~ && sudo apt-get install mercurial && hg clone https://bitbucket.org/pygame/pygame \
-  && cd pygame && sudo apt-get install python3-dev python3-numpy libsdl-dev libsdl-image1.2-dev \
-  libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libportmidi-dev \
-  libavformat-dev libswscale-dev libjpeg-dev libfreetype6-dev && python3 setup.py build \
-  && sudo python3 setup.py install
+### Score
+One's score is calculated based on the AI difficulty, maze size, progress
+through the maze, and number of mazes solved. A leaderboard containing this
+information is available to track progress.
 
-  Cairo/PyCairo should already be installed on Unix Operating systems if python
-  is present.
+### Installation instructions
+This game depends on the following resources:
+- Python 3.4
+- PyGame and its dependencies
+- Cairo
 
-# Contributions
-  Michael Steer:
-      - Rendering and Exporting the maze
-      - Menu system and state Machine (Terminal)
-      - Pygame implementation and the Game State
-      - Path Following Sprites
-      - Scoring system and Leaderboards
+To install pyGame and all of its dependencies, please run the following command.
+Copy and paste the string below to install all necessary libraries
+for this project. This assumes Python3 is already installed.
 
+```bash
+cd ~ && sudo apt-get install mercurial && hg clone \
+https://bitbucket.org/pygame/pygame && cd pygame && sudo apt-get install \
+python3-dev python3-numpy libsdl-dev libsdl-image1.2-dev libsdl-mixer1.2-dev \
+libsdl-ttf2.0-dev libsmpeg-dev libportmidi-dev libavformat-dev libswscale-dev \
+libjpeg-dev libfreetype6-dev && python3 setup.py build && sudo python3 \
+setup.py install
+```
+
+Cairo/PyCairo should already be installed on Unix Operating systems if Python
+is present.
+
+### Contributions
+
+##### [Leland Jansen](https://github.com/lelandjansen)
+- Maze generation
+   - Modified depth-first search to create "perfect" maze
+- AI Algorithm
+   - Variable-difficulty using modified depth-first search and A\* search
+   - Computation of A\* bias point
+   - Shortest path using breadth-first search
+
+##### [Michael Steer](https://github.com/michaelsteer)
+- Rendering and exporting the maze
+- Menu system and state machine (Terminal)
+- Pygame implementation and the Game State
+- Path following sprites
+- Scoring system and leaderboards
