@@ -14,8 +14,9 @@ the computer.
 
 ### AI Performance
 An overview and demonstration of the AI's performance can be found
-[here](http://www.lelandjansen.com/project/amaze)
-http://www.lelandjansen.com/project/amaze
+[here](http://www.lelandjansen.com/project/amaze).
+[www.lelandjansen.com/project/amaze](http://www.lelandjansen.com/project/amaze)
+
 
 ### Controls
 Key | Action
