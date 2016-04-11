@@ -34,7 +34,7 @@ def update_console(rounds=0):
     print("  Score: || " + str(rounds))
 
 # Generates a new maze, a new start and end point, a new AI path
-def new_round(mapSize, aiDifficulty):
+def new_round(screen, mapSize, aiDifficulty):
 
     global maze
     global endpoint
@@ -44,7 +44,7 @@ def new_round(mapSize, aiDifficulty):
     # Generate a new maze
     maze = Maze(mapSize, mapSize)
     maze.generateMaze()
-    maze.exportMaze()
+
     # Set a startpoint and endpoint for the user
     endpoint = (mapSize-1, mapSize-1)
     startpoint = (0,0)
@@ -55,6 +55,7 @@ def new_round(mapSize, aiDifficulty):
     else:
         aiPath = search.mazeAI(maze, startpoint, endpoint, aiDifficulty)
 
+    maze.exportMaze(screen, aiPath)
 # The actual game state where all the magic happens
 def game_state(mapSize, aiSpeed, aiDifficulty):
 
@@ -70,16 +71,17 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
     # Start with no score
     score = 0
 
-    # Generate an initial set of conditions
-    new_round(mapSize, aiDifficulty)
 
     # Running flag
     running = True
 
     # Setup the PyGame window
     pygame.init()
-    screen = pygame.display.set_mode((32*maze.get_sizex(), 32*maze.get_sizey()))
+    screen = pygame.display.set_mode((32*mapSize, 32*mapSize))
     pygame.display.set_caption('aMAZE - The best game ever')
+
+    # Generate an initial set of conditions
+    new_round(screen, mapSize, aiDifficulty)
 
     # Setup the User and the AI
     user = Player(startpoint[0], startpoint[1] , (0,255,0), 4)
@@ -165,7 +167,7 @@ def game_state(mapSize, aiSpeed, aiDifficulty):
             update_console(score)
 
             # Generate a new set of conditions
-            new_round(mapSize, aiDifficulty)
+            new_round(screen, mapSize, aiDifficulty)
 
             # Move the User and player back to the start and update the
             # AI path

@@ -12,7 +12,8 @@
 
 
 import random
-import cairo
+import pygame
+from pygame.locals import *
 
 nodeSize = 32   # Size of a node in pixels
 wallSize = 2    # Thickness of walls in pixels, must be even
@@ -113,19 +114,11 @@ class Maze:
         return self.maze
 
     # Export the maze to an image file
-    def exportMaze(self):
+    def exportMaze(self, screen, path=[],filename="maze.png", aifilename="mazeAI.png"):
 
-        # Setup the Cairo surface
-        MazeSurface = cairo.ImageSurface(cairo.FORMAT_RGB24, nodeSize*self.sizex, nodeSize*self.sizey)
-        surfaceHandle = cairo.Context(MazeSurface)
-
-        # Set whole surface black
-        surfaceHandle.set_source_rgb(0,0,0)
-
-        # Set the surface up for paining white walls
-        surfaceHandle.paint()
-        surfaceHandle.set_source_rgb(1,1,1)
-        surfaceHandle.set_line_width(wallSize)
+        # Fill the screen black
+        pygame.draw.rect( screen, (0,0,0), \
+                          (0, 0, self.sizex*32, self.sizey*32) )
 
         # Go through each node in the maze
         for node in self.maze:
@@ -141,6 +134,8 @@ class Maze:
 
             # Get the nodes neighbors
             neighbors = self.maze[node]
+
+
 
             # Go through each of the nodes neighbors
             for neighbor in neighbors:
@@ -161,23 +156,57 @@ class Maze:
 
             # Draw the walls that are along edges without neighbors
             if not top:
-                surfaceHandle.move_to(x*nodeSize,y*nodeSize+nodeSize)
-                surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
+                pygame.draw.line( screen, (255,255,255), \
+                                  (x*nodeSize,y*nodeSize+nodeSize), \
+                                  (x*nodeSize+nodeSize,y*nodeSize+nodeSize), \
+                                  wallSize)
+
             if not bottom:
-                surfaceHandle.move_to(x*nodeSize,y*nodeSize)
-                surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize)
+                pygame.draw.line( screen, (255,255,255), \
+                                  (x*nodeSize,y*nodeSize), \
+                                  (x*nodeSize+nodeSize,y*nodeSize), \
+                                  wallSize )
             if not left:
-                surfaceHandle.move_to(x*nodeSize,y*nodeSize)
-                surfaceHandle.line_to(x*nodeSize,y*nodeSize+nodeSize)
+                pygame.draw.line( screen, (255,255,255), \
+                                  (x*nodeSize,y*nodeSize), \
+                                  (x*nodeSize,y*nodeSize+nodeSize), \
+                                  wallSize )
             if not right:
-                surfaceHandle.move_to(x*nodeSize+nodeSize,y*nodeSize)
-                surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
+                pygame.draw.line( screen, (255,255,255), \
+                                  (x*nodeSize+nodeSize,y*nodeSize), \
+                                  (x*nodeSize+nodeSize,y*nodeSize+nodeSize), \
+                                  wallSize )
 
-        # Render the walls
-        surfaceHandle.stroke()
+        pygame.image.save(screen, filename)
 
-        # Write the image to a png file
-        MazeSurface.write_to_png("maze.png")
+        # Draw the ai's path if its specified
+        if path != list():
+            changeamnt = float(255)/float(len(path))
+            r = 255
+            b = 0
+            skipFirst = True
+
+            # Go through the path
+            for node in path:
+
+                # Skip the first node
+                if skipFirst:
+                    skipFirst = False
+                    curNode = node
+
+                else:
+                    prevNode = curNode
+                    curNode = node
+                    pygame.draw.line(screen, (r,0,b), \
+                                     (curNode[0]*32+16, curNode[1]*32+16), \
+                                     (prevNode[0]*32+16, prevNode[1]*32+16) )
+
+                # Change the line color slightly
+                r -= changeamnt
+                b += changeamnt
+
+                pygame.image.save(screen, aifilename)
+
 
     # Return the dimensions of the maze in terms of number of nodes
     def get_sizex(self):
@@ -247,27 +276,5 @@ def display_ai(maze, path=[]):
             surfaceHandle.line_to(x*nodeSize+nodeSize,y*nodeSize+nodeSize)
 
     surfaceHandle.stroke()
-    changeamnt = float(1)/float(len(path))
-    r = 1
-    b = 0
-    surfaceHandle.set_source_rgb(r, 0, b)
-    skipFirst = True
-    for node in path:
-        surfaceHandle.set_source_rgb(r, 0, b)
 
-        if skipFirst:
-            skipFirst = False
-            curNode = node
-            surfaceHandle.move_to(curNode[0]*32+16, curNode[1]*32+16)
-        else:
-            prevNode = curNode
-            curNode = node
-            surfaceHandle.move_to(prevNode[0]*32+16, prevNode[1]*32+16)
-            surfaceHandle.line_to(curNode[0]*32+16, curNode[1]*32+16)
-            #surfaceHandle.line_to(curNode[0]*32+10, curNode[1]*32+10)
-            #surfaceHandle.move_to(curNode[0]*32+16, curNode[1]*32+16)
-            surfaceHandle.stroke()
 
-        r -= changeamnt
-        b += changeamnt
-    MazeSurface.write_to_png("AI.png")
