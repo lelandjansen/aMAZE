@@ -8,8 +8,10 @@ class _Getch:
 screen."""
     def __init__(self):
         try:
+
             self.impl = _GetchWindows()
         except ImportError:
+
             self.impl = _GetchUnix()
 
     def __call__(self): return self.impl()
@@ -37,4 +39,11 @@ class _GetchWindows:
 
     def __call__(self):
         import msvcrt
-        return msvcrt.getch()
+
+        # Strip all of the stuff that surrounds the byte class
+        a = msvcrt.getch()
+        a = str(a)
+        a = a[2:]
+        a = a[:-1]
+
+        return a

@@ -331,6 +331,8 @@ def main_Menu():
 # Main Function (Entry Point)
 if __name__ == "__main__":
 
+    global get_ch
+    get_ch = getch._Getch()
     next_Menu = None
     os.system("clear")
 
