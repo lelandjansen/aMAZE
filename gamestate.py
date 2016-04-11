@@ -42,7 +42,7 @@ def new_round(mapSize, aiDifficulty):
     global aiPath
 
     # Generate a new maze
-    maze = Maze(mapsize, mapsize)
+    maze = Maze(mapSize, mapSize)
     maze.generateMaze()
     maze.exportMaze()
     # Set a startpoint and endpoint for the user
