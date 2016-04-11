@@ -65,6 +65,7 @@ is present.
    - Variable-difficulty using modified depth-first search and A\* search
    - Computation of A\* bias point
    - Shortest path using breadth-first search
+
 ##### [Michael Steer](https://github.com/michaelsteer)
 - Rendering and exporting the maze
 - Menu system and state machine (Terminal)
