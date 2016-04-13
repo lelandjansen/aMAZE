@@ -1,0 +1,87 @@
+________________________________________________________________________________
+CMPUT 275       PROJECT PROPOSAL
+
+Title           aMazing Maze Game
+
+Team members    Michael Steer and Leland Jansen
+
+
+
+________________________________________________________________________________
+DESCRIPTION
+
+aMazing Maze Game is a Python-based challenge designed to test one's aptitude in
+navigating a maze. Users can select two modes of gameplay (solo and AI) and
+three difficulty levels (trivial, respectable, and mind-numbing). To solve the
+challenge, the user must navigate a dot out of a maze. The GUI and I/O will be
+powered by the PyGame library. The user's score will be determined based on the
+time it takes to complete the challenge and whether they beat the computer (in
+User vs AI mode). As a "stretch goal", a multiplayer mode can be implemented.
+
+Main features
+
+1.  Graph generation
+    The maze will be represented using a graph class and be generation using
+    a series of algorithms such as DFS, BFS, etc.
+
+2.  GUI and visual representation (using PyGame library)
+    A method will be determined to translate a graph into a maze image that can
+    be displayed and navigated on a screen. The character and AI will also be
+    shown on the screen.
+
+3.  AI
+    An artificial intelligence system will be created to play against the user.
+    Various "difficulty" modes plan to be implemented to determine the accuracy
+    of the AI and how far "forward" it can look in the maze.
+
+
+
+________________________________________________________________________________
+DEVELOPMENT
+
+aMazing Maze Game will be programed such that a skeleton structure and basic
+GUI are created. At each milestone, features will be implemented on top of this
+foundation. Please note that some milestones are dependent on the previous
+milestones (e.g. navigating the maze requires the GUI infrastructure). Features
+will be tested individually as they are created, then in combination with each
+other when committed to the master repository.
+
+
+
+________________________________________________________________________________
+MILESTONES
+
+March 14
+    This milestone involves setting up the project infrastructure. This will
+    consist of two things: first, creating a maze graph class to represent
+    the maze; and second, generating a basic GUI. At the end of this milestone,
+    we will be able to demo the GUI and have code that generates a maze (the
+    next milestone involves visualizing the maze).
+
+March 21
+    The second milestone is mainly concerned with visualization. The most
+    significant enhancement will be displaying the maze class on the GUI with
+    the appropriate lines and barriers, and implementing a way for the user to
+    navigate the maze using the arrow keys. Additionally, a simple menu system
+    will be created. At this point, we will be able to demo how the maze is
+    visually represented and how it can navigated in the GUI.
+
+March 29 (Easter weekend)
+    This last major milestone will involve implementing the AI with varying
+    degrees of intelligence. It is anticipated that three difficulty modes will
+    be created. Finally, the AI will be implemented in the GUI such that the
+    user can race the AI to the end of the maze. By this milestone we will be
+    able to demo the AI and the User vs AI gameplay mode.fi
+
+April 4
+    It is anticipated that the project will be complete at this point. If
+    possible, our "stretch goal" of a multiplayer mode will be implemented.
+    aMazing Maze Game will have been tested and documented.
+
+April 7
+    Demo day.
+
+
+
+________________________________________________________________________________
+COMMENTS
