@@ -13,8 +13,7 @@ the computer.
 
 
 ### AI Performance
-An overview and demonstration of the AI's performance can be found
-[here](http://www.lelandjansen.com/project/amaze).
+An overview and demonstration of the AI's performance can be found at
 [www.lelandjansen.com/project/amaze](http://www.lelandjansen.com/project/amaze)
 
 
@@ -42,7 +41,9 @@ This game depends on the following resources:
 To install pyGame and all of its dependencies, please run the following command.
 Copy and paste the string below to install all necessary libraries
 for this project. This assumes Python3 is already installed.
-##### For Linux:
+
+
+##### Linux
 ```bash
 cd ~ && sudo apt-get install mercurial && hg clone \
 https://bitbucket.org/pygame/pygame && cd pygame && sudo apt-get install \
@@ -52,20 +53,19 @@ libjpeg-dev libfreetype6-dev && python3 setup.py build && sudo python3 \
 setup.py install
 ```
 
-##### For Windows:
-- Installing Python
-    Go to [the python page][https://python.org/downloads] and download     
-    version 3.5. This installation assumes you are using the 64 bit version
-- Installing pyGame
-    Download the [pyGame installer][http://www.lfd.uci.edu/~gohlke/pythonlibs/th4jbnf9/pygame-1.9.2a0-cp35-none-win_amd64.whl]
-    navigate to the download directory and run the following commands in a command prompt
-    ```bash
-    python -m ensurepip
-    python -m ensurepip --upgrade
-    python -m pip install wheel
-    python -m pip install wheel --upgrade
-    python -m pip install pygame-1.9.2a0-cp35-none-win_amd64.whl
-    ```
+##### Windows
+- Installing Python: Go to [the python page](https://python.org/downloads) and
+download version 3.5. This installation assumes you are using the 64 bit version
+- Installing pyGame: Download the
+[pyGame installer](http://www.lfd.uci.edu/~gohlke/pythonlibs/th4jbnf9/pygame-1.9.2a0-cp35-none-win_amd64.whl)
+navigate to the download directory and run the following commands in a command prompt
+```bash
+python -m ensurepip
+python -m ensurepip --upgrade
+python -m pip install wheel
+python -m pip install wheel --upgrade
+python -m pip install pygame-1.9.2a0-cp35-none-win_amd64.whl
+```
 
 ### Contributions
 ##### [Leland Jansen](https://github.com/lelandjansen)
