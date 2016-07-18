@@ -1,5 +1,5 @@
 # aMAZE
-
+[![Analytics](https://ga-beacon.appspot.com/UA-46915227-3/aMAZE)](https://github.com/igrigorik/ga-beacon)
 
 ### Overview
 aMAZE is a Python-based maze game designed by
